@@ -1,0 +1,11 @@
+specVersion: 0.36.0
+name: hello
+runtime: go
+registry: docker.io/4141gauron3268
+namespace: func
+created: 2024-09-12T09:08:19.27273994+02:00
+build:
+  builder: host
+deploy:
+  namespace: func
+  image: index.docker.io/4141gauron3268/hello@sha256:f92d9c34319f2c5d23057fc8efc026884e2c208bdc11eb41edb7806b6b381c88
