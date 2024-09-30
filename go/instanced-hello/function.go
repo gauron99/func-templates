@@ -17,6 +17,6 @@ func New() *MyFunction {
 
 // Handle an HTTP Request.
 func (f *MyFunction) Handle(w http.ResponseWriter, r *http.Request) {
-	fmt.Print("Received a request/n")      //printed on server
-	fmt.Fprint(w, "Hello, Great World!/n") //send to client
+	fmt.Print("Received a request\n")      //printed on server
+	fmt.Fprint(w, "Hello, Great World!\n") //send to client
 }
