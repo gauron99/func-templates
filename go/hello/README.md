@@ -1,11 +1,12 @@
-# Go HTTP Function
+# Go HTTP Instanced Function -- Hello-World template
 
-Welcome to your new Go Function! The boilerplate function code can be found in
-[`handle.go`](handle.go). This Function responds to HTTP requests.
+Welcome to your new Go Function! This template implements a hello world.
+Function's code can be found in [`function.go`](function.go).
+This Function responds to HTTP requests.
 
 ## Development
 
-Develop new features by adding a test to [`handle_test.go`](handle_test.go) for
+Develop new features by adding a test to [`function_test.go`](function_test.go) for
 each feature, and confirm it works with `go test`.
 
 Update the running analog of the function using the `func` CLI or client
@@ -16,5 +17,3 @@ curl http://myfunction.example.com/
 ```
 
 For more, see [the complete documentation]('https://github.com/knative/func/tree/main/docs')
-
-
