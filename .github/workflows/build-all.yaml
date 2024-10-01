@@ -28,7 +28,7 @@ jobs:
         #cycle through all languages
         url="http://github.com/gauron99/func-templates"
         for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
-          lang=$(basename "$language_dir_abs")
+          lang=$(basename "$lang_dir_abs")
           echo "Building funcs from $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
             template=$(basename "$template_dir_abs")
