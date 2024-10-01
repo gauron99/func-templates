@@ -23,6 +23,8 @@ jobs:
       run: |
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
+        echo $PWD
+        echo $GITHUB_WORKSPACE
         # cycle through all languages
         url="http://github.com/gauron99/func-templates"
         for lang_dir in $(ls -d ${GITHUB_WORKSPACE}*/); do
