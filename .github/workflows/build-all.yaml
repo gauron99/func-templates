@@ -16,6 +16,7 @@ jobs:
         echo "Installing func ${{env.VERSION}}"
         program_url="https://github.com/knative/func/releases/download/knative-${{env.VERSION}}/func_linux_amd64"
         curl -LO $program_url
+        ls ${{ github.workspace }}
         echo "$PWD/f" >> "$GITHUB_PATH"
         f version
 
