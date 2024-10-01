@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION: "v1.15.1"
-      FUNC: "https://github.com/knative/func/releases/download/knative-${{VERSION}}/func_linux_amd64"
+      FUNC: "https://github.com/knative/func/releases/download/knative-${{env.VERSION}}/func_linux_amd64"
 
     steps:
     - name: Checkout code
