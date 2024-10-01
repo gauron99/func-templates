@@ -7,8 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION: "v1.15.1"
-      FUNC: "https://github.com/knative/func/releases/download/knative-${{env.VERSION}}/func_linux_amd64"
-
+      FUNC: 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
@@ -16,7 +15,8 @@ jobs:
     - name: Install func
       run: |
         echo "Installing func ${{env.VERSION}}
-        wget ${{env.FUNC}} -o f
+        program_url="https://github.com/knative/func/releases/download/knative-${{env.VERSION}}/func_linux_amd64"
+        wget $program_url -o f
         chmod +x f
         f version
 
