@@ -21,16 +21,17 @@ jobs:
 
     - name: Build Functions
       run: |
-        for lang_dir in $(ls -d */); do
+        WORKDIR=$(mktemp -d)
+        cd $WORKDIR
+        # cycle through all languages
+        url="http://github.com/gauron99/func-templates"
+        for lang_dir in $(ls -d ${GITHUB_WORKSPACE}); do
           echo "Building funcs in $lang_dir"
-          cd $lang_dir
-          for template in $(ls -d */); do
-            echo "Building $template template in $lang_dir"
-            cd $template
-            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
-            cd ..
+          for template in $(ls -d ${GITHUB_WORKSPACE}/$lang_dir); do
+            echo "Building '$template' template in '$lang_dir' directory"
+            f create $lang_dir-$template -r="url" -l=$lang_dir -t=$template
+            #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f 
           done
-          cd ..
         done
 
 
