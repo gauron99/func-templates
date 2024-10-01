@@ -9,7 +9,8 @@ jobs:
       VERSION: "v1.15.1"
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      
+      uses: actions/checkout@v4
 
     - name: Install func
       run: |
