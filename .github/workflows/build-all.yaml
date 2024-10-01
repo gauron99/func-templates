@@ -7,7 +7,6 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VERSION: "v1.15.1"
-      FUNC: 
     steps:
     - name: Checkout code
       uses: actions/checkout@v3
