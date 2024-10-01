@@ -1,0 +1,37 @@
+name: Build All
+
+on: [pull-request]
+
+jobs:
+  builds:
+    runs-on: ubuntu-latest
+    env:
+      VERSION: "v1.15.1"
+      FUNC: "https://github.com/knative/func/releases/download/knative-${{VERSION}}/func_linux_amd64"
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Install func
+      run: |
+        echo "Installing func ${{env.VERSION}}
+        wget ${{env.FUNC}} -o f
+        chmod +x f
+        f version
+
+    - name: Build Functions
+      run: |
+        for lang_dir in $(ls -d */); do
+          echo "Building funcs in $lang_dir"
+          cd $lang_dir
+          for template in $(ls -d */); do
+            echo "Building $template template in $lang_dir"
+            cd $template
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
+            cd ..
+          done
+          cd ..
+        done
+
+
