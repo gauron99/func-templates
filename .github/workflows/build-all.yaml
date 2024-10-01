@@ -28,11 +28,12 @@ jobs:
         #cycle through all languages
         url="http://github.com/gauron99/func-templates"
         for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
-          echo "Building funcs in $lang_dir_abs"
+          lang=$(basename "$language_dir_abs")
+          echo "Building funcs from $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
-            template=$(basename $template_dir_abs)
-            echo "Building '$template' template in '$lang_dir' directory"
-            f create $lang_dir-$template -r="url" -l=$lang_dir -t=$template
+            template=$(basename "$template_dir_abs")
+            echo "Building '$template' template in '$lang'"
+            f create $lang-$template -r="$url" -l="$lang" -t="$template"
             #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f 
           done
         done
