@@ -1,5 +1,84 @@
-# func-templates
-Example Templates for Knative Functions
+# WELCOME To Knative Function Templates!
+
+### Quick search
+
+1. [Basic Information](#example-templates-for-knative-functions) TODO: first done
+2. [Project Structure](#project-structure) TODO: first run
+3. [How To Use](#how-to-use) TODO:
+    1. [Prerequisites](#prerequisites) TODO:
+    2. [Build a Function](#build-a-function) TODO:
+        1. [Host Builder](#using-the-host-builder) TODO: describe host builder
+        2. [Other Builders](#using-other-builders) TODO: mention few builders, custom
+    3. [Deploy a Function](#deploy-a-function) TODO:
+        1. [Local](#local) TODO: describe process - clone repo & use
+        1. [Remote](#remote) TODO: describe - deploy using --git-url etc.
+4. [Configuration]() TODO: Is this necessary?
+5. [Tips & Tricks]() TODO: instanced/static methods?
+6. [Q&A]() TODO: Probably get rid of this or tips section 
+7. [License](#license) TODO: 
+8. [Contact](#contact) TODO:
+
+## Example Templates for Knative Functions
+This repository showcases some use-cases for your Knative Functions!
+It is a collection of function templates. The built-in templates
+are either *http* or *cloudevents* and these are custom template overrides.
+
+Templates in this repository include:
+- The easiest Hello World (`hello`)
+- Simple splash screen with **referenced .css file** and **.funcignore** (`splash`)
+- Web blog with **serverside rendering** and **import statements** (`blog`)
+- A "Contact Us" function with a **secret password** (`contact-us`)
+
+See [project structure](#project-structure) to learn about repository and see how to [deploy](#deploy-a-function) your function.
+
+## Project structure
+ Directory structure is as follows: **root/[language]/[template]** where *root* is 
+ the github repository itself, *language* is the programming language used and
+ *template* is the name of the template. Function is created using templates via
+ `--repository` flag when using `func create` command. More in [How-To-Use](#how-to-use) section.
+
+ ```
+github.com/gauron99/func-templates <--[root]
+├── go <------------------------------[language]
+│   └── hello <-----------------------[template]
+│       └── function source files
+│   └── splash-screen
+│       └── ...   
+├── node
+│   └── hello
+│   └── splash-screen
+├── ...
+```
+
+## How To Use
+You use these templates by creating your function via `--repository` flag which
+means "create my function with this template". 
+
+- Create a function with **hello template** in **golang** within the current directory
+
+```
+func create --repository=https://github.com/gauron99/func-templates -t=hello -l go
+```
+
+- TODO add more examples / explanations
+### Prerequisites
+- Download func
+- Download docker
+- Download local cluster runner (kind)
+- Download cli commands for k8s (kubectl)
+### Build a Function
+
+#### Using the Host Builder
+This is the prefered way
+
+#### Using Alternative Builders
+This is the old way (pack/s2i)
+
+### Deploy a Function
+
+#### Local
+
+#### Remote
 
 ### tips
 - dont edit func.yaml ?
@@ -27,18 +106,10 @@ go/
 
 ```
 
-### To Decide (TODO)
-How to structure the templates?
-- or maybe even have the 'basic' template in the parent dir so its templates/go/\<template\>"
-without the 'basic' and keep only for 'advanced' (if advanced should be at all)
-- have one basic template in each and explain the logic of deploys separately
-- ditch 'basic' and 'advanced' and use specific names: go/hello-world, go/http, go/events with
-templates where the parent folder go/ will contain some basic information
-
-  #### 2 ways of deploying
-  1. host builder -- long term goal using this as default
-  2. mention the "old" and describe how to
-
+# License
+something something super license. its free yay
+# Contact
+contact us at super website here or there
 ### possible errors
 ```
 Error: function may not implement both the static and instanced method signatures simultaneously
