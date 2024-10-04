@@ -1,8 +1,8 @@
-# Python HTTP Function
+# Python 'hello' template
 
 Welcome to your new Python function project! The boilerplate function
-code can be found in [`func.py`](./func.py). This function will respond
-to incoming HTTP GET and POST requests.
+code can be found in [`func.py`](./func.py). This function will
+simply print 'Hello, World!' if a request is received successfuly.
 
 ## Endpoints
 
@@ -17,7 +17,6 @@ The health checks can be accessed in your browser at
 [http://localhost:8080/health/liveness]().
 
 You can use `func invoke` to send an HTTP request to the function endpoint.
-
 
 ## Testing
 
