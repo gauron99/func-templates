@@ -27,13 +27,14 @@ jobs:
         ## GITHUB_WORKSPACE is the root directory  (checked out?)
         #cycle through all languages
         url="http://github.com/gauron99/func-templates"
-        ls ${GITHUB_WORKSPACE} -laR
         for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs from $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
             template=$(basename "$template_dir_abs")
-            echo "Building '$template' template in '$lang'"
+            echo "contents of template folder:"
+            ls -la $template_dir_abs
+            echo "Building '$url' -- '$lang' -- '$template' called '$lang-$template'"
             f create $lang-$template -r="$url" -l="$lang" -t="$template"
             #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f 
           done
