@@ -27,7 +27,7 @@ jobs:
         ## GITHUB_WORKSPACE is the root directory  (checked out?)
         #cycle through all languages
         url="http://github.com/gauron99/func-templates"
-        ls -laR
+        ls ${GITHUB_WORKSPACE} -laR
         for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs from $lang"
