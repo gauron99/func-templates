@@ -10,12 +10,8 @@
 3. [How To Use](#how-to-use) TODO:
     1. [Prerequisites](#prerequisites) TODO:
     2. [Build a Function](#build-a-function) TODO:
-        1. [Host Builder](#using-the-host-builder) TODO: describe host builder
-        2. [Other Builders](#using-other-builders) TODO: mention few builders, custom
     3. [Deploy a Function](#deploy-a-function) TODO:
-        1. [Local](#local) TODO: describe process - clone repo & use
-        1. [Remote](#remote) TODO: describe - deploy using --git-url etc.
-4. [Configuration]() TODO: Is this necessary?
+4. [Extra Configuration]() TODO: Is this necessary?
 5. [Tips & Tricks]() TODO: instanced/static methods?
 6. [Q&A]() TODO: Probably get rid of this or tips section 
 8. [Contact](#contact) TODO:
@@ -56,10 +52,10 @@ github.com/gauron99/func-templates <--[root]
 You use these templates by creating your function via `--repository` flag which
 means "create my function with this template". 
 
-- Create a function with **hello template** in **golang** within the current directory
+- Create a function in **golang** with **hello template** within the current (empty) directory
 
 ```
-func create --repository=https://github.com/gauron99/func-templates -t=hello -l go
+func create --repository=https://github.com/gauron99/func-templates --language go --template=hello
 ```
 
 - TODO add more examples / explanations
@@ -108,7 +104,7 @@ go/
 
 ```
 # Contact
-contact us at super website here or there
+You can contact us on CNCF Slack [knative-functions](https://cloud-native.slack.com/archives/C04LKEZUXEE) channel
 ### possible errors
 ```
 Error: function may not implement both the static and instanced method signatures simultaneously
