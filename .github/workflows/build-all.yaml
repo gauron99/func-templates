@@ -1,6 +1,6 @@
 name: Create all functions
 
-on: workflow_dispatch
+on: [pull_request]
 
 jobs:
   builds:
