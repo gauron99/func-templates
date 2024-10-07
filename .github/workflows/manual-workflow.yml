@@ -12,13 +12,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Checkout Pull Request
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        id: checkout
-      run: |
-        gh pr checkout ${{ github.event.number }}
-
     - name: Install func
       run: |
         echo "Installing func ${{env.VERSION}}"
@@ -34,11 +27,10 @@ jobs:
         echo "did the cd work?"
         pwd
         ## NOTE: ls -d returns absolute path
-        ## GITHUB_WORKSPACE is the root directory  (checked out?)
+        ## GITHUB_WORKSPACE is the root directory 
         #cycle through all languages
         url="http://github.com/gauron99/func-templates"
         for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
-          echo "> ${GITHUB_WORKSPACE}"
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs in language $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
