@@ -1,4 +1,4 @@
-name: Build All
+name: Manual Flow Testing
 
 on: workflow_dispatch
 
@@ -20,6 +20,7 @@ jobs:
         f version
 
     - name: Build Functions
+      env: ACTIONS_STEP_DEBUG: true
       run: |
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
