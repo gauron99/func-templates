@@ -1,4 +1,4 @@
-name: Build All
+name: Create all functions
 
 on: [pull_request]
 
@@ -24,17 +24,18 @@ jobs:
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
         ## NOTE: ls -d returns absolute path
-        ## GITHUB_WORKSPACE is the root directory  (checked out?)
+        ## GITHUB_WORKSPACE is the root directory
         #cycle through all languages
-        url="http://github.com/gauron99/func-templates"
+        echo ">>> ${{ github.event.pull_request.title }}
+        url="http://github.com/gauron99/func-templates#${{ github.event.pull_request.title }}"
+        echo ">> url is: $url"
         for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs in language $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
             template=$(basename "$template_dir_abs")
-            ls -la $template_dir_abs
-            echo "f create $lang-$template -r=$url#${{ github.event.pull_request.title }} -l=$lang -t=$template"
-            f create $lang-$template -r "$url#${{ github.event.pull_request.title }}" -l "$lang" -t "$template"
+            echo "f create $lang-$template -r=$url -l=$lang -t=$template"
+            f create $lang-$template -r "$url" -l "$lang" -t "$template"
             #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f 
           done
         done
