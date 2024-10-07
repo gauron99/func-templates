@@ -35,9 +35,12 @@ jobs:
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs in language $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
+            echo "ls -la"
             ls -la
+            echo "pwd"
             pwd
-            ls -la ${GITUB_WORKSPACE}
+            echo "ls -la ${GITHUB_WORKSPACE}"
+            ls -la ${GITHUB_WORKSPACE}
             template=$(basename "$template_dir_abs")
             echo "f create $lang-$template -r=$url -l=$lang -t=$template"
             if [ $lang = "python" ];then
