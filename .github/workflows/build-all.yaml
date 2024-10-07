@@ -33,6 +33,8 @@ jobs:
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs in language $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
+            ls -la
+            ls -la ${GITUB_WORKSPACE}
             template=$(basename "$template_dir_abs")
             echo "f create $lang-$template -r=$url -l=$lang -t=$template"
             f create $lang-$template -r "$url" -l "$lang" -t "$template"
