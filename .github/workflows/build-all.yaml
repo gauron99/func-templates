@@ -11,6 +11,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Checkout Pull Request
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        id: checkout
+      run: |
+        gh pr checkout ${{ github.event.number }}
+
     - name: Install func
       run: |
         echo "Installing func ${{env.VERSION}}"
