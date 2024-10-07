@@ -1,6 +1,6 @@
 name: Create all functions
 
-on: [pull_request]
+on: [workflow_dispatch]
 
 jobs:
   builds:
@@ -23,6 +23,8 @@ jobs:
       run: |
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
+        echo "did the cd work?"
+        pwd
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
         #cycle through all languages
