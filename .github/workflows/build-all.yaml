@@ -26,7 +26,7 @@ jobs:
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
         #cycle through all languages
-        echo ">>> ${{ github.event.pull_request.title }}
+        echo ">>> ${{ github.event.pull_request.title }}"
         url="http://github.com/gauron99/func-templates#${{ github.event.pull_request.title }}"
         echo ">> url is: $url"
         for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
