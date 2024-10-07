@@ -23,8 +23,6 @@ jobs:
       run: |
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
-        echo "did the cd work?"
-        pwd
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
         #cycle through all languages
@@ -36,8 +34,6 @@ jobs:
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs in language $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
-            ls -la
-            ls -la ${GITUB_WORKSPACE}
             template=$(basename "$template_dir_abs")
             echo "f create $lang-$template -r=$url -l=$lang -t=$template"
             f create $lang-$template -r "$url" -l "$lang" -t "$template"

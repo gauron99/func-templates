@@ -1,5 +1,4 @@
 from parliament import Context
-from flask import Request
 import json
 
 def main(context: Context):
