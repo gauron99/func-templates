@@ -37,9 +37,15 @@ See [templates structure](#templates-structure) to learn about repository and se
 
 ## How To Use
 You use these templates by creating your function via `--repository` flag which
-means "create my function with this template". 
+means "create my function with this template".
 
-- Create a function in **golang** with **hello template** within the current (empty) directory
+Create your functions directory and `cd` into it
+
+```
+mkdir -p ~/testing/myfunc && cd ~/testing/myfunc
+```
+
+- Create a function in **golang** with **hello template** within the new (current and empty) directory
 
 ```
 func create --repository=https://github.com/gauron99/func-templates --language go --template=hello
