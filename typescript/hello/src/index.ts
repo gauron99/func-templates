@@ -2,7 +2,7 @@ import { Context, StructuredReturn } from 'faas-js-runtime';
 
 /**
  * Your HTTP handling function, invoked with each request. This is an example
- * function that logs the incoming request and echoes its input to the caller.
+ * function that will just print (return) a Hello World.
  *
  * It can be invoked with `func invoke`
  * It can be tested with `npm test`
@@ -21,20 +21,9 @@ import { Context, StructuredReturn } from 'faas-js-runtime';
  */
 const handle = async (context: Context, body: string): Promise<StructuredReturn> => {
   // YOUR CODE HERE
-  context.log.info(`
------------------------------------------------------------
-Headers:
-${JSON.stringify(context.headers)}
-
-Query:
-${JSON.stringify(context.query)}
-
-Body:
-${JSON.stringify(body)}
------------------------------------------------------------
-`);
+  context.log.info(`request recieved`);
   return {
-    body: body,
+    body: "Hello Typescript World!",
     headers: {
       'content-type': 'application/json'
     }
