@@ -55,7 +55,8 @@ jobs:
         # language AND its full path (where the func template is)
         language_path=$(echo '${{env.language_paths}}' | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
 
-        url="https://github.com/gauron99/func-templates"
+        ## use the Pull request environment so that the changes are included in testing
+        url="https://github.com/gauron99/func-templates#{{ github.event.pull_request.title }}"
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
         echo "Building funcs in language ${{matrix.language}}"
