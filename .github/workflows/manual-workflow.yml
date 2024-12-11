@@ -17,7 +17,7 @@ jobs:
       uses: gauron99/knative-func-action@main
       with:
         version: ${{ env.FUNC_VERSION }}
-        name: func
+        name: f
     - name: Get Matrix
       id: get-matrix
       run: |
@@ -27,8 +27,13 @@ jobs:
         pwd
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
-        echo "TO MATRIX: $(ls -d ${GITHUB_WORKSPACE}/*/)"
-        echo "languages=$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+        languages="{\"new\":["
+        languages+="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
+        languages+="]}" 
+
+        echo "TO MATRIX:$languages"
+
+        echo languages=languages >> $GITHUB_OUTPUT
 
   deploy:
     needs: prepare
