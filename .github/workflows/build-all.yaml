@@ -6,19 +6,16 @@ jobs:
   builds:
     runs-on: ubuntu-latest
     env:
-      VERSION: "v1.15.1"
+      FUNC_VERSION: "v1.16.1"
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Install func
-      run: |
-        echo "Installing func ${{env.VERSION}}"
-        program_url="https://github.com/knative/func/releases/download/knative-${{env.VERSION}}/func_linux_amd64"
-        curl -SLO $program_url && mv func_linux_amd64 f && chmod +x f
-        cp f /usr/local/bin
-        f version
-
+      uses: gauron99/knative-func-action@main
+      with:
+        version: ${{ VERSION }}
+        name: f
     - name: Build Functions
       run: |
         WORKDIR=$(mktemp -d)
