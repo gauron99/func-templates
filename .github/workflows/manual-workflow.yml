@@ -61,7 +61,7 @@ jobs:
           echo "ls -la ${GITHUB_WORKSPACE}"
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
-          echo "f create $lang-$template -r=$url -l=$lang -t=$template"
+          echo "f create $language-$template -r=$url -l=$language -t=$template"
           f create $language-$template -r "$url" -l "$language" -t "$template"
           #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f
         done
