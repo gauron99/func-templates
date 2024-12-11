@@ -48,16 +48,15 @@ jobs:
       run: |
         echo "Current language: ${{ matrix.language }}"
           
-        index=$(echo $language_paths | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
+        language_path=$(echo ${{env.language_paths}} | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
         # Use the index to get the corresponding value from 'language_paths'
-        echo "Corresponding language path: $index"
+        echo "Corresponding language path: $language_path"
+        ls -laR $language_path
           
-        ls -lR $index
-
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
         echo "Building funcs in language ${{matrix.language}}"
-        for template_dir_abs in $(ls -d ${{env.language_path}}*/); do
+        for template_dir_abs in $(ls -d $language_path*/); do
           echo "ls -la"
           ls -la
           echo "pwd"
