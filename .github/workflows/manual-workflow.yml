@@ -49,6 +49,11 @@ jobs:
         language=${{matrix.language}}
         echo "Current language: $language"
         
+        f version
+        which f
+        func version
+        which func
+
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
         # language AND its full path (where the func template is)
