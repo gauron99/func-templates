@@ -29,8 +29,8 @@ jobs:
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
         language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
-        languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | basename | jq -R -s 'split("\n")[:-1]')" 
-
+        #languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
+        languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | xargs -n 1 basename | jq -R -s 'split("\n")[:-1]')"
         echo "TO MATRIX:$languages"
 
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
