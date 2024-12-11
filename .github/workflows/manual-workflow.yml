@@ -17,7 +17,7 @@ jobs:
       uses: gauron99/knative-func-action@main
       with:
         version: ${{ env.FUNC_VERSION }}
-        name: f
+        name: func
     - name: Get Matrix
       id: get-matrix
       run: |
