@@ -3,12 +3,12 @@ name: Manual Flow Testing
 on: workflow_dispatch
 
 jobs:
-  builds:
+  prepare:
     runs-on: ubuntu-latest
+    outputs:
+      languages: ${{ steps.get-matrix.outputs.languages }}
     env:
       FUNC_VERSION: "v1.16.1"
-      ACTIONS_STEP_DEBUG: true
-      ALL_LANGUAGES: "['go','python','node','rust','springboot','quarkus','typescript']"
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -16,21 +16,35 @@ jobs:
     - name: Install func
       uses: gauron99/knative-func-action@main
       with:
-        version: ${{ FUNC_VERSION }}
+        version: ${{ env.FUNC_VERSION }}
         name: f
 
-    - name: Build Functions
-      matrix: ${{ ALL_LANGUAGES }}
+    - name: Get Matrix
+      id: get-matrix
       run: |
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
         echo "did the cd work?"
         pwd
         ## NOTE: ls -d returns absolute path
-        ## GITHUB_WORKSPACE is the root directory 
-        #cycle through all languages
-        url="http://github.com/gauron99/func-templates"
-        for lang_dir_abs in $(ls -d ${GITHUB_WORKSPACE}/*/); do
+        ## GITHUB_WORKSPACE is the root directory
+        echo "TO MATRIX: $(ls -d ${GITHUB_WORKSPACE}/*/)"
+        echo "languages=$(ls -d ${GITHUB_WORKSPACE}/*/)" >> $GITHUB_OUTPUT
+      
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: ${{ needs.prepare.outputs.languages }}
+    env:
+      ACTIONS_STEP_DEBUG: true
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+     
+    - name: Build Functions
+      run: |
+        
           lang=$(basename "$lang_dir_abs")
           echo "Building funcs in language $lang"
           for template_dir_abs in $(ls -d $lang_dir_abs*/); do
