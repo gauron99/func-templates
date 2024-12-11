@@ -50,12 +50,12 @@ jobs:
           
         index=$(echo $language_paths | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
         # Use the index to get the corresponding value from 'language_paths'
-        echo "Corresponding language path: ${language_paths_array[$index]}"
+        echo "Corresponding language path: $index"
           
       
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
-        echo "Building funcs in language $language"
+        echo "Building funcs in language ${{matrix.language}}"
         for template_dir_abs in $(ls -d ${{env.language_path}}*/); do
           echo "ls -la"
           ls -la
