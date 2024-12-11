@@ -14,11 +14,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install func
-      uses: gauron99/knative-func-action@main
-      with:
-        version: ${{ env.FUNC_VERSION }}
-        name: f
     - name: Prep Matrix
       id: prep-matrix
       run: |
@@ -44,16 +39,17 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v4
 
+    - name: Install func
+      uses: gauron99/knative-func-action@main
+      with:
+        version: ${{ env.FUNC_VERSION }}
+        name: f
+
     - name: Build Functions
       run: |
         language=${{matrix.language}}
         echo "Current language: $language"
         
-        f version
-        which f
-        func version
-        which func
-
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
         # language AND its full path (where the func template is)
