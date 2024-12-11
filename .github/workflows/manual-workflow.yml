@@ -8,16 +8,19 @@ jobs:
     env:
       FUNC_VERSION: "v1.16.1"
       ACTIONS_STEP_DEBUG: true
+      ALL_LANGUAGES: "['go','python','node','rust','springboot','quarkus','typescript']"
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Install func
       uses: gauron99/knative-func-action@main
-        version: ${{ FUNC_VERSION}}
+      with:
+        version: ${{ FUNC_VERSION }}
         name: f
 
     - name: Build Functions
+      matrix: ${{ ALL_LANGUAGES }}
       run: |
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
@@ -39,11 +42,7 @@ jobs:
             ls -la ${GITHUB_WORKSPACE}
             template=$(basename "$template_dir_abs")
             echo "f create $lang-$template -r=$url -l=$lang -t=$template"
-            if [ $lang = "python" ];then
-              f create $lang-$template -r "$url" 
-            else
-              f create $lang-$template -r "$url" -l "$lang" -t "$template"
-            fi
+            f create $lang-$template -r "$url" -l "$lang" -t "$template"
             #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f 
           done
         done
