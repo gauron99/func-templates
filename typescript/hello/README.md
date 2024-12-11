@@ -1,4 +1,4 @@
-# TypeScript HTTP Hello Function
+# TypeScript HTTP Hello World! Function
 
 Welcome to your new TypeScript function project! The boilerplate function code 
 can be found in [`index.ts`](./index.ts). This function will simply print
