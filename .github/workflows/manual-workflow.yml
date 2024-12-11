@@ -74,7 +74,7 @@ jobs:
           echo "f create $lang-$template -r=$url -l=$lang -t=$template"
           f create $lang-$template -r "$url" -l "$lang" -t "$template"
           #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f
-       done
+        done
       
 
 
