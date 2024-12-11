@@ -18,7 +18,6 @@ jobs:
       with:
         version: ${{ env.FUNC_VERSION }}
         name: f
-
     - name: Get Matrix
       id: get-matrix
       run: |
@@ -29,13 +28,14 @@ jobs:
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
         echo "TO MATRIX: $(ls -d ${GITHUB_WORKSPACE}/*/)"
-        echo "languages=$(ls -d ${GITHUB_WORKSPACE}/*/)" >> $GITHUB_OUTPUT
-      
+        echo "languages=$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" >> $GITHUB_OUTPUT
+
   deploy:
+    needs: prepare
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        language: ${{ needs.prepare.outputs.languages }}
+        language: ${{ fromJSON(needs.prepare.outputs.languages) }}
     env:
       ACTIONS_STEP_DEBUG: true
     steps:
@@ -44,21 +44,19 @@ jobs:
 
     - name: Build Functions
       run: |
-        
-          lang=$(basename "$lang_dir_abs")
-          echo "Building funcs in language $lang"
-          for template_dir_abs in $(ls -d $lang_dir_abs*/); do
-            echo "ls -la"
-            ls -la
-            echo "pwd"
-            pwd
-            echo "ls -la ${GITHUB_WORKSPACE}"
-            ls -la ${GITHUB_WORKSPACE}
-            template=$(basename "$template_dir_abs")
-            echo "f create $lang-$template -r=$url -l=$lang -t=$template"
-            f create $lang-$template -r "$url" -l "$lang" -t "$template"
-            #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f 
-          done
-        done
+        lang=$(basename "$lang_dir_abs")
+        echo "Building funcs in language $lang"
+        for template_dir_abs in $(ls -d $lang_dir_abs*/); do
+          echo "ls -la"
+          ls -la
+          echo "pwd"
+          pwd
+          echo "ls -la ${GITHUB_WORKSPACE}"
+          ls -la ${GITHUB_WORKSPACE}
+          template=$(basename "$template_dir_abs")
+          echo "f create $lang-$template -r=$url -l=$lang -t=$template"
+          f create $lang-$template -r "$url" -l "$lang" -t "$template"
+          #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f             done
+      
 
 
