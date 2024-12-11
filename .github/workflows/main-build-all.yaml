@@ -16,7 +16,7 @@ jobs:
     - name: Install func
       uses: gauron99/knative-func-action@main
       with:
-        version: ${{FUNC_VERSION}}
+        version: ${{env.FUNC_VERSION}}
         name: f
 
     - name: Build Functions
