@@ -1,4 +1,4 @@
-# Function Hello World!
+# Quarkus Function Hello World!
 
 Welcome to your 'Hello World!' Quarkus function project!
 
