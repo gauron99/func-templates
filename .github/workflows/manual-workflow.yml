@@ -8,7 +8,7 @@ jobs:
     outputs:
       languages: ${{ steps.get-matrix.outputs.languages }}
     env:
-      FUNC_VERSION: "v1.16.1"
+      FUNC_VERSION: "knative-v1.16.1"
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
