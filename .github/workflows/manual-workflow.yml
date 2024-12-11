@@ -47,24 +47,21 @@ jobs:
     - name: Build Functions
       run: |
         echo "Current language: ${{ matrix.language }}"
-          
+        
+        # This takes the array of paths, wraps it in single quotes for jq, then
+        # selects only the value that matches with language to get current
+        # language AND its full path (where the func template is)
         language_path=$(echo '${{env.language_paths}}' | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
-        # Use the index to get the corresponding value from 'language_paths'
-        echo "Corresponding language path: $language_path"
-        ls -laR $language_path
-          
+
+        url="https://github.com/gauron99/func-templates"
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
         echo "Building funcs in language ${{matrix.language}}"
         for template_dir_abs in $(ls -d $language_path*/); do
-          echo "ls -la"
-          ls -la
-          echo "pwd"
-          pwd
           echo "ls -la ${GITHUB_WORKSPACE}"
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
           echo "f create $lang-$template -r=$url -l=$lang -t=$template"
-          f create $lang-$template -r "$url" -l "$lang" -t "$template"
+          f create $language-$template -r "$url" -l "$language" -t "$template"
           #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f
         done
