@@ -7,6 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       languages: ${{ steps.get-matrix.outputs.languages }}
+      language_paths: ${{ steps.get-matrix.outputs.language_paths }}
     env:
       FUNC_VERSION: "knative-v1.16.1"
     steps:
@@ -27,12 +28,12 @@ jobs:
         pwd
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
-        #languages="{\"new\":["
-        languages+="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
-        #languages+="]}" 
+        language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
+        languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | basename | jq -R -s 'split("\n")[:-1]')" 
 
         echo "TO MATRIX:$languages"
 
+        echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
 
   deploy:
@@ -40,8 +41,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        #language: ${{ needs.prepare.outputs.languages }}
-        language: ${{ fromJSON(needs.prepare.outputs.languages) }}
+        language_path: ${{ fromJSON(needs.prepare.outputs.languages) }}
     env:
       ACTIONS_STEP_DEBUG: true
     steps:
@@ -50,7 +50,7 @@ jobs:
 
     - name: Build Functions
       run: |
-        lang=$(basename "$lang_dir_abs")
+        lang=$(basename "${{matrix.language_path}}")
         echo "Building funcs in language $lang"
         for template_dir_abs in $(ls -d $lang_dir_abs*/); do
           echo "ls -la"
