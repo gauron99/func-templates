@@ -49,12 +49,9 @@ jobs:
         echo "Current language: ${{ matrix.language }}"
           
         # Convert the JSON string of 'language_paths' into an array
-        language_paths_list=$(echo ${{ needs.prepare.outputs.language_paths }} | jq -r '.[]')
+        language_paths_list=$(echo ${{ needs.prepare.outputs.language_paths }} | jq -c '.[]')
         echo $language_paths_list
         IFS=$'\n' read -d '' -ra language_paths_array <<< "$language_paths_list"
-          
-        # Find the index of the current language in the languages array
-        index=$(echo ${{ toJSON(matrix.language) }} | jq 'index(.)' ${{ needs.prepare.outputs.languages }})
         
         # Use the index to get the corresponding value from 'language_paths'
         echo "Corresponding language path: ${language_paths_array[$index]}"
@@ -75,6 +72,3 @@ jobs:
           f create $lang-$template -r "$url" -l "$lang" -t "$template"
           #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f
         done
-      
-
-
