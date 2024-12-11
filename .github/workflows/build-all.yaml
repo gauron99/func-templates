@@ -16,6 +16,7 @@ jobs:
       with:
         version: ${{ FUNC_VERSION }}
         name: f
+
     - name: Build Functions
       run: |
         WORKDIR=$(mktemp -d)
