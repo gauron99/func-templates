@@ -48,7 +48,7 @@ jobs:
       run: |
         echo "Current language: ${{ matrix.language }}"
           
-        index=$(echo $language_paths | jq -r ".[] | select(contains(\"${{matrix.language}}\"))"
+        index=$(echo $language_paths | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
         # Use the index to get the corresponding value from 'language_paths'
         echo "Corresponding language path: ${language_paths_array[$index]}"
           
