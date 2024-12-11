@@ -1,6 +1,6 @@
-# Function project
+# Function Hello World!
 
-Welcome to your new Quarkus function project!
+Welcome to your 'Hello World!' Quarkus function project!
 
 This sample project contains a single function: `functions.Function.function()`,
 the function just returns its argument.
