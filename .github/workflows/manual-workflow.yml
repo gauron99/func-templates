@@ -33,7 +33,7 @@ jobs:
 
         echo "TO MATRIX:$languages"
 
-        echo languages=languages >> $GITHUB_OUTPUT
+        echo languages=$languages >> $GITHUB_OUTPUT
 
   deploy:
     needs: prepare
