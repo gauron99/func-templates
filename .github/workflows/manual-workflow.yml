@@ -27,10 +27,11 @@ jobs:
         pwd
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
-        languages="{\"new\":["
-        languages+="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
-        languages+="]}" 
+        #languages="{\"new\":["
+        #languages+="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
+        #languages+="]}" 
 
+        languages+="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
         echo "TO MATRIX:$languages"
 
         echo languages=$languages >> $GITHUB_OUTPUT
@@ -40,7 +41,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        language: ${{ fromJSON(needs.prepare.outputs.languages) }}
+        language: ${{ needs.prepare.outputs.languages }}
+        #language: ${{ fromJSON(needs.prepare.outputs.languages) }}
     env:
       ACTIONS_STEP_DEBUG: true
     steps:
