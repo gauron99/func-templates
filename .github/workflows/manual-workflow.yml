@@ -6,8 +6,8 @@ jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
-      languages: ${{ steps.get-matrix.outputs.languages }}
-      language_paths: ${{ steps.get-matrix.outputs.language_paths }}
+      languages: ${{ steps.prep-matrix.outputs.languages }}
+      language_paths: ${{ steps.prep-matrix.outputs.language_paths }}
     env:
       FUNC_VERSION: "knative-v1.16.1"
     steps:
@@ -19,20 +19,15 @@ jobs:
       with:
         version: ${{ env.FUNC_VERSION }}
         name: f
-    - name: Get Matrix
-      id: get-matrix
+    - name: Prep Matrix
+      id: prep-matrix
       run: |
-        WORKDIR=$(mktemp -d)
-        cd $WORKDIR
-        echo "did the cd work?"
-        pwd
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
         language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
-        #languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
         languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | xargs -n 1 basename | jq -R -s 'split("\n")[:-1]')"
-        echo "TO MATRIX:$languages"
 
+        # set output
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
 
@@ -41,18 +36,33 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        language_path: ${{ fromJSON(needs.prepare.outputs.languages) }}
+        language: ${{ fromJSON(needs.prepare.outputs.languages) }}
     env:
       ACTIONS_STEP_DEBUG: true
+      language_paths: ${{needs.prepare.outputs.language_paths}}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
 
     - name: Build Functions
       run: |
-        lang=$(basename "${{matrix.language_path}}")
-        echo "Building funcs in language $lang"
-        for template_dir_abs in $(ls -d $lang_dir_abs*/); do
+        echo "Current language: ${{ matrix.language }}"
+          
+        # Convert the JSON string of 'language_paths' into an array
+        language_paths_list=$(echo ${{ needs.prepare.outputs.language_paths }} | jq -r '.[]')
+        IFS=$'\n' read -d '' -ra language_paths_array <<< "$language_paths_list"
+          
+        # Find the index of the current language in the languages array
+        index=$(echo ${{ toJSON(matrix.language) }} | jq 'index(.)' ${{ needs.prepare.outputs.languages }})
+        
+        # Use the index to get the corresponding value from 'language_paths'
+        echo "Corresponding language path: ${language_paths_array[$index]}"
+          
+      
+        WORKDIR=$(mktemp -d)
+        cd $WORKDIR
+        echo "Building funcs in language $language"
+        for template_dir_abs in $(ls -d ${{env.language_path}}*/); do
           echo "ls -la"
           ls -la
           echo "pwd"
