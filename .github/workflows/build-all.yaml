@@ -50,7 +50,7 @@ jobs:
 
     - name: Deploy Function
       run: |
-        HOST_ENABLED=contains(fromJSON('${{env.HOST_ENABLED_LANGUAGES}}''),'${{matrix.language}}')
+        HOST_ENABLED=contains(fromJSON('${{env.HOST_ENABLED_LANGUAGES}}'),'${{matrix.language}}')
 
         language=${{matrix.language}}
         echo "Current language is $language"
