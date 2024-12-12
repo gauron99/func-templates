@@ -71,6 +71,8 @@ jobs:
           ## FUNC CREATE
           f create $language-$template -r "$url" -l "$language" -t "$template"
 
+          cd $language-$template
+
           ## FUNC BUILD
           if ${{env.HOST_ENABLED}}; then
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
