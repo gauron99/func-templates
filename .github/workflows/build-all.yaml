@@ -36,6 +36,7 @@ jobs:
     env:
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
+      # UPDATE THIS IF HOST BUILDER IS ENABLED FOR MORE LANGUAGES
       HOST_ENABLED_LANGUAGES: '["go"]'
       HEADREF: ${{github.head_ref}}
     steps:
@@ -50,6 +51,8 @@ jobs:
 
     - name: Deploy Function
       run: |
+        # DETERMINE IF HOST BUILDER SHOULD BE USED
+        ## NOTE: HOST_ENABLED_LANGUAGES MUST BE UP TO DATE
         if echo '${{env.HOST_ENABLED_LANGUAGES}}' | jq -r ".[] | select(. == \"${{matrix.language}}\")" | grep -q .; then
           HOST_ENABLED=true
         else
@@ -69,7 +72,6 @@ jobs:
         url="https://github.com/gauron99/func-templates#${{ env.HEADREF }}"
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
-        echo "Building funcs in language ${{matrix.language}}"
         for template_dir_abs in $(ls -d $language_path*/); do
           echo "ls -la ${GITHUB_WORKSPACE}"
           ls -la ${GITHUB_WORKSPACE}
@@ -84,7 +86,7 @@ jobs:
 
           ## FUNC BUILD
           echo "> FUNC BUILD"
-          if ${{env.HOST_ENABLED}}; then
+          if $HOST_ENABLED; then
             echo "build with host"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
