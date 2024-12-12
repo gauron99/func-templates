@@ -48,11 +48,9 @@ jobs:
         version: ${{ env.FUNC_VERSION }}
         name: f
 
-    - name: Deploy Functions
+    - name: Deploy Function
       run: |
         language=${{matrix.language}}
-        echo "Current language: $language"
-        echo "HOST_ENABLED? ${{env.HOST_ENABLED}}"
 
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
@@ -69,6 +67,13 @@ jobs:
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
           echo "f create $language-$template -r=$url -l=$language -t=$template"
+          
+          ## FUNC CREATE
           f create $language-$template -r "$url" -l "$language" -t "$template"
-          #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f
+
+          ## FUNC BUILD
+          if ${{env.HOST_ENABLED}}; then
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
+          else
+            FUNC_REGISTR=docker.io/4141gauron3268 f build 
         done
