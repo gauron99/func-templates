@@ -50,12 +50,11 @@ jobs:
 
     - name: Deploy Function
       run: |
-        HOST_ENABLED=$(echo '${{env.HOST_ENABLED_LANGUAGES}}' | jq -r ".[] | select(. == \"${{matrix.language}}\")" | grep -q .)
-        #if echo '${{env.HOST_ENABLED_LANGUAGES}}' | jq -r ".[] | select(. == \"${{matrix.language}}\")" | grep -q .; then
-        #HOST_ENABLED=true
-        #else
-        #HOST_ENABLED=false
-        #fi
+        if echo '${{env.HOST_ENABLED_LANGUAGES}}' | jq -r ".[] | select(. == \"${{matrix.language}}\")" | grep -q .; then
+          HOST_ENABLED=true
+        else
+          HOST_ENABLED=false
+        fi
 
         language=${{matrix.language}}
         echo "Current language is $language"
