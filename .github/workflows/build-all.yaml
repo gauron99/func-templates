@@ -37,7 +37,6 @@ jobs:
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
       HOST_ENABLED_LANGUAGES: '["go"]'
-      HOST_ENABLED: ${{ matrix.language == 'go' || matrix.language == 'python' && 'true' || 'false'}}
       HEADREF: ${{github.head_ref}}
     steps:
     - name: Checkout code
@@ -51,7 +50,11 @@ jobs:
 
     - name: Deploy Function
       run: |
+        HOST_ENABLED=$(contains(fromJSON(${{env.HOST_ENABLED_LANGUAGES}}),${{matrix.language}}))
+
         language=${{matrix.language}}
+        echo "Current language is $language"
+        echo "host enabled? ${{env.HOST_ENABLED}}"
 
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
@@ -67,17 +70,21 @@ jobs:
           echo "ls -la ${GITHUB_WORKSPACE}"
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
-          echo "f create $language-$template -r=$url -l=$language -t=$template"
           
           ## FUNC CREATE
+          echo "> FUNC CREATE"
+          echo "f create $language-$template -r=$url -l=$language -t=$template"
           f create $language-$template -r "$url" -l "$language" -t "$template"
 
           cd $language-$template
 
           ## FUNC BUILD
+          echo "> FUNC BUILD"
           if ${{env.HOST_ENABLED}}; then
+            echo "build with host"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
+            echo "build with pack"
             FUNC_REGISTR=docker.io/4141gauron3268 f build --builder=pack
           fi
         done
