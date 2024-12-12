@@ -50,11 +50,11 @@ jobs:
 
     - name: Deploy Function
       run: |
-        HOST_ENABLED=contains(fromJSON('${{env.HOST_ENABLED_LANGUAGES}}'),'${{matrix.language}}')
+        HOST_ENABLED=$(contains(fromJSON('${{env.HOST_ENABLED_LANGUAGES}}'),'${{matrix.language}}'))
 
         language=${{matrix.language}}
         echo "Current language is $language"
-        echo "host enabled? ${{env.HOST_ENABLED}}"
+        echo "host enabled? $HOST_ENABLED"
 
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
