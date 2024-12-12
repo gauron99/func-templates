@@ -30,12 +30,13 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         language: ${{ fromJSON(needs.prepare.outputs.languages) }}
     env:
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
-      HOST_ENABLED_LANGUAGES: '["go","python"]'
+      HOST_ENABLED_LANGUAGES: '["go"]'
       HOST_ENABLED: ${{ matrix.language == 'go' || matrix.language == 'python' && 'true' || 'false'}}
       HEADREF: ${{github.head_ref}}
     steps:
@@ -77,6 +78,6 @@ jobs:
           if ${{env.HOST_ENABLED}}; then
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
-            FUNC_REGISTR=docker.io/4141gauron3268 f build 
+            FUNC_REGISTR=docker.io/4141gauron3268 f build --builder=pack
           fi
         done
