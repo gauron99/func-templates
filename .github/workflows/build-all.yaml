@@ -30,11 +30,15 @@ jobs:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         language: ${{ fromJSON(needs.prepare.outputs.languages) }}
     env:
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
+      # UPDATE THIS IF HOST BUILDER IS ENABLED FOR MORE LANGUAGES
+      HOST_ENABLED_LANGUAGES: '["go"]'
+      HEADREF: ${{github.head_ref}}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -45,26 +49,48 @@ jobs:
         version: ${{ env.FUNC_VERSION }}
         name: f
 
-    - name: Build Functions
+    - name: Deploy Function
       run: |
+        # DETERMINE IF HOST BUILDER SHOULD BE USED
+        ## NOTE: HOST_ENABLED_LANGUAGES MUST BE UP TO DATE
+        if echo '${{env.HOST_ENABLED_LANGUAGES}}' | jq -r ".[] | select(. == \"${{matrix.language}}\")" | grep -q .; then
+          HOST_ENABLED=true
+        else
+          HOST_ENABLED=false
+        fi
+
         language=${{matrix.language}}
-        echo "Current language: $language"
-        
+        echo "Current language is $language"
+        echo "host enabled? $HOST_ENABLED"
+
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
         # language AND its full path (where the func template is)
         language_path=$(echo '${{env.language_paths}}' | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
 
         ## use the Pull request environment so that the changes are included in testing
-        url="https://github.com/gauron99/func-templates#${{ github.head_ref }}"
+        url="https://github.com/gauron99/func-templates#${{ env.HEADREF }}"
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
-        echo "Building funcs in language ${{matrix.language}}"
         for template_dir_abs in $(ls -d $language_path*/); do
           echo "ls -la ${GITHUB_WORKSPACE}"
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
+          
+          ## FUNC CREATE
+          echo "> FUNC CREATE"
           echo "f create $language-$template -r=$url -l=$language -t=$template"
           f create $language-$template -r "$url" -l "$language" -t "$template"
-          #FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f
+
+          cd $language-$template
+
+          ## FUNC BUILD
+          echo "> FUNC BUILD"
+          if $HOST_ENABLED; then
+            echo "build with host"
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
+          else
+            echo "build with pack"
+            FUNC_REGISTRY=docker.io/4141gauron3268 f build --builder=pack
+          fi
         done
