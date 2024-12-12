@@ -76,4 +76,5 @@ jobs:
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
             FUNC_REGISTR=docker.io/4141gauron3268 f build 
+          fi
         done
