@@ -35,6 +35,8 @@ jobs:
     env:
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
+      HOST_ENABLED_LANGUAGES: ['go','python']
+      HOST_ENABLED: ${{ matrix.language == 'go' || matrix.language == "python" && 'true' || 'false'}}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -45,11 +47,12 @@ jobs:
         version: ${{ env.FUNC_VERSION }}
         name: f
 
-    - name: Build Functions
+    - name: Deploy Functions
       run: |
         language=${{matrix.language}}
         echo "Current language: $language"
-        
+        echo "HOST_ENABLED? ${{env.HOST_ENABLED}}"
+
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
         # language AND its full path (where the func template is)
