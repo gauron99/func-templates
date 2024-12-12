@@ -7,9 +7,6 @@ import { Context, StructuredReturn } from 'faas-js-runtime';
  * It can be invoked with `func invoke`
  * It can be tested with `npm test`
  *
- * It can be invoked with `func invoke`
- * It can be tested with `npm test`
- *
  * @param {Context} context a context object.
  * @param {object} context.body the request body if any
  * @param {object} context.query the query string deserialized as an object, if any
@@ -21,9 +18,10 @@ import { Context, StructuredReturn } from 'faas-js-runtime';
  */
 const handle = async (context: Context, body: string): Promise<StructuredReturn> => {
   // YOUR CODE HERE
-  context.log.info(`request recieved`);
+  context.log.info(`request received`);
+  context.log.info(body);
   return {
-    body: "Hello Typescript World!",
+    body: 'Hello Typescript World!',
     headers: {
       'content-type': 'application/json'
     }

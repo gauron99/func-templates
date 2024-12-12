@@ -12,7 +12,7 @@ To run locally
 ```console
 npm install
 npm run build
-npm run local
+npm run start
 ```
 
 ## Testing
