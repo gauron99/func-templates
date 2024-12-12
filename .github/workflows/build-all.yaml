@@ -35,8 +35,9 @@ jobs:
     env:
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
-      HOST_ENABLED_LANGUAGES: ['go','python']
-      HOST_ENABLED: ${{ matrix.language == 'go' || matrix.language == "python" && 'true' || 'false'}}
+      HOST_ENABLED_LANGUAGES: '["go","python"]'
+      HOST_ENABLED: ${{ matrix.language == 'go' || matrix.language == 'python' && 'true' || 'false'}}
+      HEADREF: ${{github.head_ref}}
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -59,7 +60,7 @@ jobs:
         language_path=$(echo '${{env.language_paths}}' | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
 
         ## use the Pull request environment so that the changes are included in testing
-        url="https://github.com/gauron99/func-templates#${{ github.head_ref }}"
+        url="https://github.com/gauron99/func-templates#${{ env.HEADREF }}"
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
         echo "Building funcs in language ${{matrix.language}}"
