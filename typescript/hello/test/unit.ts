@@ -7,16 +7,11 @@ import { handle } from '../build/index.js';
 
 // Ensure that the function completes cleanly when passed a valid event.
 test('Unit: handles a valid request', async (t) => {
-  t.plan(2);
-  const body: Record<string, string> = {
-    name: 'tiger',
-    customerId: '01234'
-  };
+  t.plan(1);
 
   // Invoke the function which should complete without error and echo the data
-  const result = await handle({ log: { info: (_) => _ } } as Context, body);
+  const result = await handle({ log: { info: (_) => _ } } as Context);
   t.ok(result);
-  t.equal(result.body, body);
   t.end();
 });
 
