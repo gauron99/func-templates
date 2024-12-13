@@ -4,9 +4,12 @@ Welcome to your new Rust function project! The boilerplate
 [actix](https://actix.rs/) web server is in
 [`src/main.rs`](./src/main.rs). It's configured to invoke the `index`
 function in [`src/handler.rs`](./src/handler.rs) in response to both
-GET and POST requests it prints a 'Hello World!'. 
+GET and POST requests it prints a simple Hello World!. 
 You should put your desired behavior inside that `index` function. In case you need to configure
 some resources for your function, you can do that in the [`configure` function](./src/config.rs).
+
+The app will expose `\` endpoint that will trigger the `index` function for
+either GET or POST methods. 
 
 ## Development
 
