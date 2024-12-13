@@ -83,24 +83,29 @@ jobs:
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
           
-          ## FUNC CREATE
+          ############################## FUNC CREATE ##############################
           echo "> FUNC CREATE"
+
           echo "f create $language-$template -r=$url -l=$language -t=$template"
           f create $language-$template -r "$url" -l "$language" -t "$template"
 
           cd $language-$template
 
-          ## FUNC BUILD
+          ############################## FUNC BUILD ##############################
           echo "> FUNC BUILD"
+
           if $HOST_ENABLED; then
             echo "build with host"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
             echo "build with pack"
+
             if [ ${{matrix.language}} == "typescript" ];then
               npm install
-            fi 
-            ## TODO: TYPESCRIPT: NEEDS TO RUN NPM INSTALL FIRST
+            fi
+            if [ ${{matrix.language}} == "rust"]; then
+              cargo build
+            fi
             FUNC_REGISTRY=docker.io/4141gauron3268 f build --builder=pack
           fi
         done
