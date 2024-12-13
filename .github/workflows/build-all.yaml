@@ -1,7 +1,9 @@
 name: Build All Functions
 
-on: pull_request
-
+on: 
+  pull_request:
+    paths-ignore:
+      - '.github/**'
 jobs:
   prepare:
     runs-on: ubuntu-latest
