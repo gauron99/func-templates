@@ -51,6 +51,12 @@ jobs:
 
     - name: Deploy Function
       run: |
+        # series of commands to build & deploy the Function (with specifics per language)
+        # Might change this to <one "run" per language> scenario because then
+        # I would just need to check the matrix language for which one to run
+
+
+
         # DETERMINE IF HOST BUILDER SHOULD BE USED
         ## NOTE: HOST_ENABLED_LANGUAGES MUST BE UP TO DATE
         if echo '${{env.HOST_ENABLED_LANGUAGES}}' | jq -r ".[] | select(. == \"${{matrix.language}}\")" | grep -q .; then
@@ -91,6 +97,10 @@ jobs:
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
             echo "build with pack"
+            if [ ${{matrix.language}} == "typescript" ];then
+              npm install
+            fi 
+            ## TODO: TYPESCRIPT: NEEDS TO RUN NPM INSTALL FIRST
             FUNC_REGISTRY=docker.io/4141gauron3268 f build --builder=pack
           fi
         done
