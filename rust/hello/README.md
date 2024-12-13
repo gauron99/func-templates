@@ -27,7 +27,7 @@ Use `func` to containerize your application, publish it to a registry
 and deploy it as a Knative Service in your Kubernetes cluster:
 
 ```shell script
-func deploy --registry=docker.io/<YOUR_ACCOUNT>
+func deploy --registry=docker.io/<YOUR_NAMESPACE>
 ```
 
 You can omit the `--registry` option by setting the `FUNC_REGISTRY`
