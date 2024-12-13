@@ -1,4 +1,4 @@
-use actix_web::{web, App, HttpResponse, HttpServer};
+use actix_web::{web, App, HttpServer};
 use env_logger::{Builder, Env};
 use std::{
     env,
@@ -27,7 +27,6 @@ async fn main() -> Result<()> {
             .configure(config::configure)
             .route("/", web::get().to(handler::index))
             .route("/", web::post().to(handler::index))
-            )
     })
     .bind(("0.0.0.0", port))?
     .workers(1)

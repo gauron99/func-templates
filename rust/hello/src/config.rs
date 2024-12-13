@@ -30,13 +30,13 @@ pub fn configure(cfg: &mut ServiceConfig) {
 /// An example of the function configuration structure.
 #[derive(Clone)]
 pub struct HandlerConfig {
-    pub name: String,
+    pub response: String,
 }
 
 impl Default for HandlerConfig {
     fn default() -> HandlerConfig {
         HandlerConfig {
-            name: "world".into(),
+            response: "Hello Rust World!".to_string(),
         }
     }
 }

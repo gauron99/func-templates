@@ -6,7 +6,7 @@ use log::info;
 pub async fn index(req: HttpRequest, config: Data<HandlerConfig>) -> HttpResponse {
     info!("{:#?}", req);
     if req.method() == Method::GET || req.method() == Method::POST{
-        HttpResponse::Ok().body("Hello Rust World!\n")
+        HttpResponse::Ok().body(format!("{}\n",config.response))
     } else {
         HttpResponse::Ok().body("Unknown method\n")
     }
