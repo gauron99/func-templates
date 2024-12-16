@@ -5,9 +5,7 @@ on:
     paths-ignore:
       - '.github/**'
   push:
-    branches: 
-      - main
-      - workflow-stuff
+    branches: main
 jobs:
   prepare:
     runs-on: ubuntu-latest
