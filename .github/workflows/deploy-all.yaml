@@ -1,4 +1,4 @@
-name: Build All Functions
+name: Deploy All Functions
 
 on: 
   pull_request:
@@ -30,6 +30,12 @@ jobs:
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
 
+    - name: Set up kind
+      uses: helm/kind-action@v1.5.0
+    - name: Create cluster
+      run: |
+        kind create cluster --name github-action-cluster
+
   deploy:
     needs: prepare
     runs-on: ubuntu-latest
@@ -58,8 +64,6 @@ jobs:
         # series of commands to build & deploy the Function (with specifics per language)
         # Might change this to <one "run" per language> scenario because then
         # I would just need to check the matrix language for which one to run
-
-
 
         # DETERMINE IF HOST BUILDER SHOULD BE USED
         ## NOTE: HOST_ENABLED_LANGUAGES MUST BE UP TO DATE
@@ -99,10 +103,10 @@ jobs:
           echo "> FUNC BUILD"
 
           if $HOST_ENABLED; then
-            echo "build with host"
+            echo "deploy (build with host)"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
-            echo "build with pack"
+            echo "deploy (build with pack)"
 
             if [ ${{matrix.language}} == "typescript" ];then
               npm install
@@ -110,6 +114,6 @@ jobs:
             if [ ${{matrix.language}} == "rust"]; then
               cargo build
             fi
-            FUNC_REGISTRY=docker.io/4141gauron3268 f build --builder=pack
+            FUNC_REGISTRY=docker.io/4141gauron3268 f deploy --builder=pack
           fi
         done
