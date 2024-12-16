@@ -13,11 +13,11 @@ public class Function {
      * @return a Java bean
      */
     @Funq
-    public Output function(Input input) {
+    public Output function() {
 
         // Add business logic here
 
-        return new Output("Hello, Quarkus World!");
+        return new Output("Hello Quarkus World!");
     }
 
 }
