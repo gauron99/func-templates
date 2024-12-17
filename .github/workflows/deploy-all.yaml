@@ -7,6 +7,7 @@ on:
   pull_request_target:
     paths:
       - '.github/**'
+    types: [synchronize,opened,reopened]
 jobs:
   prepare:
     runs-on: ubuntu-latest
