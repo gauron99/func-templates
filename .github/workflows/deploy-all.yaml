@@ -29,11 +29,12 @@ jobs:
         ## GITHUB_WORKSPACE is the root directory
         language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
         languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | xargs -n 1 basename | jq -R -s 'split("\n")[:-1]')"
-        echo "$language_paths"
-        echo "-----------"
-        echo "$languages"
-        echo "-----------"
-
+        echo $language_paths
+        # filter out 'hack/' directory
+        FILTERED_LIST=$(printf "%s\n" "${language_paths[@]}" | grep -v "hack")
+        echo "Filtered List:"
+        echo "$FILTERED_LIST"
+  
         # set output
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
