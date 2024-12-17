@@ -4,9 +4,9 @@ on:
   pull_request:
     paths-ignore:
       - '.github/**'
-  push:
-    branches: [main,workflow-stuff]
-    types: [synchronize,opened]
+  pull_request_target:
+    paths:
+      - '.github/**'
 jobs:
   prepare:
     runs-on: ubuntu-latest
