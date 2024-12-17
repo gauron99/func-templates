@@ -1,9 +1,15 @@
-name: Build All Functions
+name: Deploy All Functions
 
 on: 
   pull_request:
     paths-ignore:
       - '.github/**'
+  pull_request_target:
+    types:
+      - opened
+      - reopened
+      - synchronize
+    
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -23,11 +29,18 @@ jobs:
         ## GITHUB_WORKSPACE is the root directory
         language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
         languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | xargs -n 1 basename | jq -R -s 'split("\n")[:-1]')"
-
+        echo $language_paths
+        # filter out 'hack/' directory
+        FILTERED_LIST=$(printf "%s\n" "${language_paths[@]}" | grep -v "hack")
+        echo "Filtered List:"
+        echo "$FILTERED_LIST"
+  
         # set output
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
 
+    - name: Set up evironment
+      run: hack/install-binaries.sh
   deploy:
     needs: prepare
     runs-on: ubuntu-latest
@@ -56,8 +69,6 @@ jobs:
         # series of commands to build & deploy the Function (with specifics per language)
         # Might change this to <one "run" per language> scenario because then
         # I would just need to check the matrix language for which one to run
-
-
 
         # DETERMINE IF HOST BUILDER SHOULD BE USED
         ## NOTE: HOST_ENABLED_LANGUAGES MUST BE UP TO DATE
@@ -94,13 +105,13 @@ jobs:
           cd $language-$template
 
           ############################## FUNC BUILD ##############################
-          echo "> FUNC BUILD"
+          echo "> FUNC DEPLOY"
 
           if $HOST_ENABLED; then
-            echo "build with host"
-            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
+            echo "deploy (build with host)"
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f deploy
           else
-            echo "build with pack"
+            echo "deploy (build with pack)"
 
             if [ ${{matrix.language}} == "typescript" ];then
               npm install
@@ -108,6 +119,6 @@ jobs:
             if [ ${{matrix.language}} == "rust"]; then
               cargo build
             fi
-            FUNC_REGISTRY=docker.io/4141gauron3268 f build --builder=pack
+            FUNC_REGISTRY=docker.io/4141gauron3268 f deploy --builder=pack
           fi
         done

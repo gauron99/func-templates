@@ -1,4 +1,4 @@
-[![Build All](https://github.com/gauron99/func-templates/actions/workflows/main-build-all.yaml/badge.svg?branch=main&event=push)](https://github.com/gauron99/func-templates/actions/workflows/main-build-all.yaml)
+[![Deploy All](https://github.com/gauron99/func-templates/actions/workflows/deploy-all.yaml/badge.svg?branch=main&event=push)](https://github.com/gauron99/func-templates/actions/workflows/deploy-all.yaml)
 # WELCOME To Knative Function Templates!
 
 ### Quick search
