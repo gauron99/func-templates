@@ -5,6 +5,8 @@ import request from 'supertest';
 import * as func from '../build';
 import test, { Test } from 'tape';
 
+const data = { message: 'Hello Typescript World!' };
+
 const errHandler = (t: Test) => (err: Error) => {
   t.error(err);
   t.end();
@@ -24,7 +26,7 @@ test('Integration: handles a valid request', (t) => {
         // NOTE: Server returns Hello World, regardless of the data sent.
         // TODO: You can change the server (index.ts) to return some data and
         // validate it here by changing this string to that data.
-        t.deepEqual(result.body, 'Hello Typescript World!');
+        t.deepEqual(JSON.stringify(result.body), JSON.stringify(data));
         server.close();
         t.end();
       });

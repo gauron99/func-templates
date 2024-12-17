@@ -21,7 +21,7 @@ const handle = async (context: Context, body: string): Promise<StructuredReturn>
   context.log.info(`request received`);
   context.log.info(body);
   return {
-    body: 'Hello Typescript World!',
+    body: JSON.stringify({ message: 'Hello Typescript World!' }),
     headers: {
       'content-type': 'application/json'
     }
