@@ -5,7 +5,8 @@ on:
     paths-ignore:
       - '.github/**'
   push:
-    branches: main
+    branches: [main,workflow-stuff]
+    types: [synchronize,opened]
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -30,12 +31,8 @@ jobs:
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
 
-    - name: Set up kind
-      uses: helm/kind-action@v1.5.0
-    - name: Create cluster
-      run: |
-        kind create cluster --name github-action-cluster
-
+    - name: Set up evironment
+      run: hack/install-binaries.sh
   deploy:
     needs: prepare
     runs-on: ubuntu-latest
@@ -100,11 +97,11 @@ jobs:
           cd $language-$template
 
           ############################## FUNC BUILD ##############################
-          echo "> FUNC BUILD"
+          echo "> FUNC DEPLOY"
 
           if $HOST_ENABLED; then
             echo "deploy (build with host)"
-            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f deploy
           else
             echo "deploy (build with pack)"
 
