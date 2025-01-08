@@ -99,8 +99,7 @@ jobs:
 
           ############################# FUNC BUILD #############################
           echo "> FUNC BUILD"
-
-          if [ $HOST_ENABLED ]; then
+          if [ $HOST_ENABLED=='true' ]; then
             echo "deploy (build with host)"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f deploy
           else
