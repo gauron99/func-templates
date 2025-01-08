@@ -118,7 +118,7 @@ jobs:
           if [ "$HOST_ENABLED" == "true" ]; then
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_CONTAINER=false f run &
           else
-            FUNC_CONTAINER=false f run &
+            FUNC_CONTAINER=true f run &
           fi
 
           RUN_PID=$!
@@ -135,7 +135,7 @@ jobs:
           if f invoke; then
             echo "'func invoke' succeeded."
             kill $RUN_PID
-            wait $RUN_PID 2>dev/null
+            wait $RUN_PID 2>/dev/null
           else
             echo "'func invoke' failed."
             exit 1
