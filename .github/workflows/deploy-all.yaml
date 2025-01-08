@@ -135,7 +135,7 @@ jobs:
           MAX_RETRIES=5
           RETRY_COUNT=0
           SUCCESS=false
-          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             echo "Attempt $RETRY_COUNT of $MAX_RETRIES"
             echo "Invoking 'func invoke' with current PID $$"
             if f invoke; then
