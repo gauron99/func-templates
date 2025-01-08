@@ -132,10 +132,11 @@ jobs:
 
           sleep 5
           ############################# FUNC INVOKE #############################
+          echo "Invoking 'func invoke' with current PID $$"
           if f invoke; then
             echo "'func invoke' succeeded."
             kill $RUN_PID
-            wait $RUN_PID 2>/dev/null
+           #wait $RUN_PID 2>/dev/null
           else
             echo "'func invoke' failed."
             exit 1
