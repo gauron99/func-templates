@@ -1,4 +1,4 @@
-name: Deploy All Functions
+name: Invoke All Functions
 
 on: 
   pull_request:
@@ -117,9 +117,10 @@ jobs:
           
           ############################## FUNC RUN ##############################
           f run &
-          RUN_PID=$! #capture process ID
+          #capture process ID
+          RUN_PID=$!
 
-          if ps -p $RUN_ID > /dev/null; then
+          if ps -p $RUN_PID > /dev/null; then
             echo "'func run' is running with PID $RUN_PID"
           else
             echo "Failed to start 'func run'. Exiting"
