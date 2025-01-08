@@ -59,7 +59,7 @@ jobs:
 
     - name: Build & Invoke Function
       run: |
-        # series of commands to build & deploy the Function (with specifics per language)
+        # series of commands to build & invoke the Function (with specifics per language)
         # Might change this to <one "run" per language> scenario because then
         # I would just need to check the matrix language for which one to run
 
@@ -99,7 +99,7 @@ jobs:
 
           ############################# FUNC BUILD #############################
           echo "> FUNC BUILD"
-          if [ $HOST_ENABLED == "true" ]; then
+          if [ "$HOST_ENABLED" == "true" ]; then
             echo "deploy (build with host)"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f deploy
           else
@@ -111,7 +111,27 @@ jobs:
             if [ ${{matrix.language}} == "rust"]; then
               cargo build
             fi
+
+          
+          ############################## FUNC RUN ##############################
+          func run &
+          RUN_PID=$! #capture process ID
+
+          if ps -p $RUN_ID > /dev/null; then
+            echo "'func run' is running with PID $RUN_PID"
+          else
+            echo "Failed to start 'func run'. Exiting"
+            exit 1
+          fi
+
+          sleep 5
           ############################# FUNC INVOKE #############################
-            FUNC_REGISTRY=docker.io/4141gauron3268 f invoke
+          if f invoke; then
+            echo "'func invoke' succeeded."
+            kill $RUN_PID
+            wait $RUN_PID 2>dev/null
+          else
+            echo "'func invoke' failed."
+            exit 1
           fi
         done
