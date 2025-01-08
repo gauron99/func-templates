@@ -116,7 +116,7 @@ jobs:
           #fi
           
           ############################## FUNC RUN ##############################
-          func run &
+          f run &
           RUN_PID=$! #capture process ID
 
           if ps -p $RUN_ID > /dev/null; then
