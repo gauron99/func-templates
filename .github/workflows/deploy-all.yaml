@@ -132,11 +132,25 @@ jobs:
 
           sleep 5
           ############################# FUNC INVOKE #############################
-          echo "Invoking 'func invoke' with current PID $$"
-          if f invoke; then
-            echo "'func invoke' succeeded."
-            kill $RUN_PID
-           #wait $RUN_PID 2>/dev/null
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          SUCCESS=false
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; then
+            echo "Attempt $RETRY_COUNT of $MAX_RETRIES"
+            echo "Invoking 'func invoke' with current PID $$"
+            if f invoke; then
+              echo "'func invoke' succeeded."
+              SUCCESS=true
+              break
+            else
+              echo "'func invoke' failed."
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              sleep 2
+            fi
+          done
+          kill $RUN_PID
+          if [ "$SUCCESS" = true ]; then
+            echo "all good"
           else
             echo "'func invoke' failed."
             exit 1
