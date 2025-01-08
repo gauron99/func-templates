@@ -103,18 +103,19 @@ jobs:
             echo "build with host"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
-            echo "build with pack"
-          fi
+            echo "build with pack"  
 
-          if [ ${{matrix.language}} == "typescript" ];then
-            npm install
-          elif [ ${{matrix.language}} == "rust"]; then
-            cargo build
+            #TODO this might be moved up above the if statement for HOSTBUILDER?
+            if [ ${{matrix.language}} == "typescript" ];then
+              npm install
+            elif [ ${{matrix.language}} == "rust"]; then
+              cargo build
+            fi
+            FUNC_REGISTRY=docker.io/4141gauron3268 f build
           fi
-          
           
           ############################## FUNC RUN ##############################
-          f run &
+          FUNC_ENABLE_HOST_BUILDER=1 f run &
           #capture process ID
           RUN_PID=$!
 
