@@ -108,15 +108,19 @@ jobs:
             #TODO this might be moved up above the if statement for HOSTBUILDER?
             if [ ${{matrix.language}} == "typescript" ];then
               npm install
-            elif [ ${{matrix.language}} == "rust"]; then
+            elif [ ${{matrix.language}} == "rust" ]; then
               cargo build
             fi
             FUNC_REGISTRY=docker.io/4141gauron3268 f build
           fi
           
           ############################## FUNC RUN ##############################
-          FUNC_ENABLE_HOST_BUILDER=1 f run &
-          #capture process ID
+          if [ "$HOST_ENABLED" == "true" ];then
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_CONTAINER=false f run &
+          elif #run standard
+            FUNC_CONTAINER=false f run &
+          fi
+
           RUN_PID=$!
 
           if ps -p $RUN_PID > /dev/null; then
