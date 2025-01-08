@@ -99,21 +99,19 @@ jobs:
 
           ############################# FUNC BUILD #############################
           echo "> FUNC BUILD"
-          FUNC_REGISTRY=docker.io/4141gauron3268 f build
+          if [ "$HOST_ENABLED" == "true" ]; then
+            echo "build with host"
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
+          else
+            echo "build with pack"
+          fi
 
-          #if [ "$HOST_ENABLED" == "true" ]; then
-          #  echo "deploy (build with host)"
-          #  FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f deploy
-          #else
-          #  echo "deploy (build with pack)"
-          #
-          #  if [ ${{matrix.language}} == "typescript" ];then
-          #    npm install
-          #  fi
-          #  if [ ${{matrix.language}} == "rust"]; then
-          #    cargo build
-          #  fi
-          #fi
+          if [ ${{matrix.language}} == "typescript" ];then
+            npm install
+          elif [ ${{matrix.language}} == "rust"]; then
+            cargo build
+          fi
+          
           
           ############################## FUNC RUN ##############################
           f run &
