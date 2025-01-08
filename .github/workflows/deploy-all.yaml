@@ -117,7 +117,7 @@ jobs:
           ############################## FUNC RUN ##############################
           if [ "$HOST_ENABLED" == "true" ]; then
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_CONTAINER=false f run &
-          elif 
+          else
             FUNC_CONTAINER=false f run &
           fi
 
