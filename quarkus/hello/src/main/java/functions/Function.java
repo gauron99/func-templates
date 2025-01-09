@@ -13,10 +13,12 @@ public class Function {
      * @return a Java bean
      */
     @Funq
-    public Output function() {
-
+    public Output function(Input input) {
+				
         // Add business logic here
 
+				// NOTE: Use input to capture incoming request data (input.getMessage)
+				// return new Output(input.getMessage());
         return new Output("Hello Quarkus World!");
     }
 

@@ -14,13 +14,14 @@ public class FunctionTest {
 
     @Test
     void testFunction() {
-        Output output = (new Function()).function();
+        Output output = (new Function()).function(new Input("should not be printed"));
         Assertions.assertEquals("Hello Quarkus World!", output.getMessage());
     }
 
     @Test
     public void testFunctionIntegration() {
         RestAssured.given().contentType("application/json")
+								.body("{\"message\": \"shall not be used\"}")
                 .header("ce-id", "42")
                 .header("ce-specversion", "1.0")
                 .post("/")
