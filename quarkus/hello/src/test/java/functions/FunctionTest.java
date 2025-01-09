@@ -21,7 +21,7 @@ public class FunctionTest {
     @Test
     public void testFunctionIntegration() {
         RestAssured.given().contentType("application/json")
-								.body("{\"message\": \"shall not be used\"}")
+				.body("{\"message\": \"shall not be used\"}")
                 .header("ce-id", "42")
                 .header("ce-specversion", "1.0")
                 .post("/")
