@@ -1,9 +1,10 @@
-name: Build All Functions
+name: Invoke All Functions
 
 on: 
   pull_request:
     paths-ignore:
       - '.github/**'
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
@@ -28,7 +29,7 @@ jobs:
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
 
-  deploy:
+  run:
     needs: prepare
     runs-on: ubuntu-latest
     strategy:
@@ -51,13 +52,11 @@ jobs:
         version: ${{ env.FUNC_VERSION }}
         name: f
 
-    - name: Deploy Function
+    - name: Build & Invoke Function
       run: |
-        # series of commands to build & deploy the Function (with specifics per language)
+        # series of commands to build & invoke the Function (with specifics per language)
         # Might change this to <one "run" per language> scenario because then
         # I would just need to check the matrix language for which one to run
-
-
 
         # DETERMINE IF HOST BUILDER SHOULD BE USED
         ## NOTE: HOST_ENABLED_LANGUAGES MUST BE UP TO DATE
@@ -85,7 +84,7 @@ jobs:
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
           
-          ############################## FUNC CREATE ##############################
+          ############################# FUNC CREATE #############################
           echo "> FUNC CREATE"
 
           echo "f create $language-$template -r=$url -l=$language -t=$template"
@@ -93,21 +92,62 @@ jobs:
 
           cd $language-$template
 
-          ############################## FUNC BUILD ##############################
+          ############################# FUNC BUILD #############################
           echo "> FUNC BUILD"
-
-          if $HOST_ENABLED; then
+          if [ "$HOST_ENABLED" == "true" ]; then
             echo "build with host"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
-            echo "build with pack"
+            echo "build with pack"  
 
+            #TODO this might be moved up above the if statement for HOSTBUILDER?
             if [ ${{matrix.language}} == "typescript" ];then
               npm install
-            fi
-            if [ ${{matrix.language}} == "rust"]; then
+            elif [ ${{matrix.language}} == "rust" ]; then
               cargo build
             fi
-            FUNC_REGISTRY=docker.io/4141gauron3268 f build --builder=pack
+            FUNC_REGISTRY=docker.io/4141gauron3268 f build
+          fi
+          
+          ############################## FUNC RUN ##############################
+          if [ "$HOST_ENABLED" == "true" ]; then
+            FUNC_ENABLE_HOST_BUILDER=1 FUNC_CONTAINER=false f run &
+          else
+            FUNC_CONTAINER=true f run &
+          fi
+
+          RUN_PID=$!
+
+          if ps -p $RUN_PID > /dev/null; then
+            echo "'func run' is running with PID $RUN_PID"
+          else
+            echo "Failed to start 'func run'. Exiting"
+            exit 1
+          fi
+
+          sleep 5
+          ############################# FUNC INVOKE #############################
+          MAX_RETRIES=5
+          RETRY_COUNT=0
+          SUCCESS=false
+          while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
+            echo "Attempt $RETRY_COUNT of $MAX_RETRIES"
+            echo "Invoking 'func invoke' with current PID $$"
+            if f invoke; then
+              echo "'func invoke' succeeded."
+              SUCCESS=true
+              break
+            else
+              echo "'func invoke' failed."
+              RETRY_COUNT=$((RETRY_COUNT + 1))
+              sleep 2
+            fi
+          done
+          kill $RUN_PID
+          if [ "$SUCCESS" = true ]; then
+            echo "all good"
+          else
+            echo "'func invoke' failed."
+            exit 1
           fi
         done
