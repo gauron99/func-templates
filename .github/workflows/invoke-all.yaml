@@ -24,6 +24,7 @@ jobs:
         ## GITHUB_WORKSPACE is the root directory
         language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
         languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | xargs -n 1 basename | jq -R -s 'split("\n")[:-1]')"
+        
         # set output
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
