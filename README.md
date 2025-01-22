@@ -3,7 +3,7 @@
 
 # WELCOME To Knative Function Templates!
 
-### Quick search
+## Quick search
 
 1. [Basic Information](#templates-for-knative-functions) TODO: first done
 2. [Prerequisites](#prerequisites) TODO: basic info, link to Luke's separate readme
@@ -27,13 +27,87 @@ Templates in this repository include:
 - Web blog with **serverside rendering** and **import statements** (`blog`)
 - A "Contact Us" function with a **secret password** (`contact-us`)
 
-See [templates structure](#templates-structure) to learn about repository and see how to [deploy](#deploy-a-function) your function.
+See [templates structure](#templates-structure) to learn about repository and
+see how to [deploy](#deploy-a-function) your function.
 
-### Prerequisites TODO: move above How To Use
-- Download func
-- Download docker
-- Download local cluster runner (kind)
-- Download cli commands for k8s (kubectl)
+## Prerequisites
+In order to use Functions, you will need a few things:
+
+### Download the `func` binary
+You can clone our [GitHub repository](https://github.com/knative/func/) and 
+build your binary from the source or download it straight from the
+[release pages](https://github.com/knative/func/releases) under *Assets*.
+
+Alternatively, for your convenience, see if your OS and architecture can be
+found in the list below for an easy copy&paste and download our latest version
+`knative-v1.16.1`.
+
+### Linux
+
+#### amd64
+```bash
+curl -L -o /usr/local/bin/func https://github.com/knative/func/releases/download/knative-v1.16.1/func_linux_amd64
+```
+
+#### arm64
+```bash
+curl -L -o /usr/local/bin/func https://github.com/knative/func/releases/download/knative-v1.16.1/func_linux_arm64
+```
+
+### Windows
+
+#### PowerShell
+```powershell
+Invoke-WebReqest -Uri "https://github.com/knative/func/releases/download/knative-v1.16.1/func_windows_amd64.exe" -OutFile <"C:\path\to\your\destination\func.exe">
+```
+alternatively if `curl` is pre-installed
+```powershell
+curl -L -o <C:\path\to\your\destination\func.exe> "https://github.com/knative/func/releases/download/knative-v1.16.1/func_windows_amd64.exe" 
+```
+*NOTE: You need to change the part in <> to your desired destination*
+*(don't include the "<>" symbols)*
+### Mac (darwin OS)
+
+#### amd64
+
+```sh
+curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/download/knative-v1.16.1/func_darwin_amd64"
+```
+
+#### arm64
+
+```sh
+curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/download/knative-v1.16.1/func_darwin_arm64"
+```
+
+*NOTE: After downloading on MacOS and Linux, you might need to make the file
+executable*
+
+```sh
+chmod +x /usr/local/bin/func
+```
+
+### Get a containerization technology
+These are some open-source examples of what you can use with Functions. You will
+need some tools to atleast build and push your images. This list is not exhaustive.
+
+[Buildah](https://github.com/containers/buildah/blob/main/install.md) - CLI tool
+to build your images.
+
+[Podman](https://podman.io/docs/installation#installing-on-linux) - complementary
+to Buildah. Helps you manage and modify your images. Uses Buildah's golang API.
+Can be installed independently. (*You can get this as a standalone tool*)
+
+[Docker Engine](https://docs.docker.com/engine/install/) - Helps you build and 
+containerize your applications. (*You can get this as a standalone tool*)
+
+#### Download local cluster runner (kind)
+Please refer to kind
+[installation page](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+or download any other runner that you like.
+#### Download cli commands for k8s (kubectl)
+In order to interact with the objects in k8s, its recommended to get
+[kubectl](https://kubernetes.io/docs/tasks/tools/).
 
 ## How To Use
 You use these templates by creating your function via `--repository` flag which
