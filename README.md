@@ -5,7 +5,7 @@
 
 ## Quick search
 
-1. [Basic Information](#templates-for-knative-functions) TODO: first done
+1. [Basic Information](#templates-for-knative-functions)
 2. [Prerequisites](#prerequisites) TODO: link to Luke's separate readme
 3. [How To Use](#how-to-use) TODO:
     1. [Prerequisites](#prerequisites) TODO:
