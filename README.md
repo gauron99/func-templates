@@ -102,7 +102,7 @@ Can be installed independently. (*You can get this as a standalone tool*)
 containerize your applications. (*You can get this as a standalone tool*)
 
 #### Download local cluster runner (kind)
-Please refer to kind
+Please refer to **kind**
 [installation page](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 or download any other runner that you like.
 #### Download cli commands for k8s (kubectl)
@@ -129,16 +129,56 @@ func create --repository=https://github.com/gauron99/func-templates --language g
 ### Build a Function
 
 #### Using the Host Builder
-This is the prefered way
+***NOTE**: Currently, this is under heavy construction and will become the default in the
+future.*
+
+In order to use the Host Builder in the mean time, you will need to enable it via a ENV variable
+and set it in `func` via CLI flag.
+
+Alternativelly, run this in your terminal, or put in your config file (*bashrc*)
+```bash
+export FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false
+```
 
 #### Using Alternative Builders
-This is the old way (pack/s2i)
-
+Alternative built-in builders are `pack` and `s2i` (for supported languages).
+The way to use them is simple. Just specify which one you want using the
+`--builder` flag (eg. `--builder=pack`)
 ### Deploy a Function
+*NOTE: In order to deploy anything to a cluster, you will need to have one set up
+and running along with atleast [Knative-Serving](https://knative.dev/docs/serving/) installed.*
+
+
+You can skip the building step entirely and deploy straight after creating your
+function. (building is included in the `deploy`).
 
 #### Local
+You can deploy your local code (from your machine) to a cluster using a standard
+deploy command. `func` will need to know a registry to use for the image
+*to be created*. You can specify with a flag or wait to be prompted for it.
+```bash
+func deploy --registry=myregistry.com/username
+```
+If you already have your image you can also specify it via `--image` flag. Any
+standard image will work, either tagged, which will be built or specify a `sha`
+with your image to solely deploy it.
+
+
+```bash
+func deploy --image=registry.com/username/myimage@sha256:xxx
+```
+
+*NOTE: If you know what you want, at any point you can add a `--build` flag to
+your command which will explicitely tell `func` if you want to build (or not)
+your image. (truthy values will work).*
 
 #### Remote
+
+You can also utilize a remote deployment, which will use
+[tekton](https://tekton.dev/) under the hood. (Which will need to be present in
+your cluster).
+
+You can simply add `--remote` to your `func deploy` command.
 
 ## Templates structure
  Directory structure is as follows: **root/[language]/[template]** where *root* is 
