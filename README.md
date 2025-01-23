@@ -200,8 +200,13 @@ github.com/gauron99/func-templates <--[root]
 ```
 # Contact
 You can contact us on CNCF Slack [knative-functions](https://cloud-native.slack.com/archives/C04LKEZUXEE) channel
+
 ### F&Q
+1.
 ```
 Error: function may not implement both the static and instanced method signatures simultaneously
--> this happens when `func (f *F) Somename(){}` is defined as well as `func Handle(){}`
 ```
+***->** this happens when `func (f *F) Somename(){}` is defined as well as
+`func Handle(){}`, these are the 2 signatures supported currently - instanced
+and static. You will need to check your source code and remove the signature you
+don't want.*
