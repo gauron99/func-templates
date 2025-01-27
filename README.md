@@ -1,5 +1,5 @@
 [![Invoke All Functions](https://github.com/gauron99/func-templates/actions/workflows/invoke-all.yaml/badge.svg)](https://github.com/gauron99/func-templates/actions/workflows/invoke-all.yaml)
-[![License](https://github.com/gauron99/func-templates/blob/main/LICENSE)
+[![License](https://img.shields.io/github/license/gauron99/func-templates)(https://github.com/gauron99/func-templates/blob/main/LICENSE)]
 
 # WELCOME To Knative Function Templates!
 
