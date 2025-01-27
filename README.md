@@ -7,14 +7,12 @@
 
 1. [Basic Information](#templates-for-knative-functions)
 2. [Prerequisites](#prerequisites) TODO: link to Luke's separate readme
-3. [How To Use](#how-to-use) TODO:
-    1. [Prerequisites](#prerequisites) TODO:
-    2. [Build a Function](#build-a-function) TODO:
-    3. [Deploy a Function](#deploy-a-function) TODO:
-4. [Extra Configuration]() TODO: Is this necessary?
-5. [Tips & Tricks]() TODO: instanced/static methods?
-6. [Q&A]() TODO: Probably get rid of this or tips section 
-7. [Contact](#contact) TODO:
+3. [How To Use](#how-to-use)
+    1. [Build a Function](#build-a-function)
+    2. [Deploy a Function](#deploy-a-function)
+4. [Function Templates Structure](#templates-structure)
+6. [Contact](#contact)
+7. [F&Q](F&Q)
 
 ## Templates for Knative Functions
 This repository showcases some use-cases for your Knative Functions!
