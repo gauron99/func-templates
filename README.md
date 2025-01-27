@@ -1,4 +1,6 @@
 [![Invoke All Functions](https://github.com/gauron99/func-templates/actions/workflows/invoke-all.yaml/badge.svg)](https://github.com/gauron99/func-templates/actions/workflows/invoke-all.yaml)
+[![License](https://img.shields.io/github/license/gauron99/func-templates)](https://github.com/gauron99/func-templates/blob/main/LICENSE)
+
 # WELCOME To Knative Function Templates!
 
 ### Quick search
@@ -16,7 +18,6 @@
 4. [Configuration]() TODO: Is this necessary?
 5. [Tips & Tricks]() TODO: instanced/static methods?
 6. [Q&A]() TODO: Probably get rid of this or tips section 
-7. [License](#license) TODO: 
 8. [Contact](#contact) TODO:
 
 ## Example Templates for Knative Functions
@@ -106,9 +107,6 @@ go/
 - ...
 
 ```
-
-# License
-something something super license. its free yay
 # Contact
 contact us at super website here or there
 ### possible errors
