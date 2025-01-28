@@ -138,7 +138,7 @@ export FUNC_ENABLE_HOST_BUILDER=1
 ```
 
 Then simply add `--builder=host` to build your Function with the Host builder.
-If you want to `func run` your Function locally first, make sure to `--container=false`
+If you want to `func run` your Function locally first, make sure to use `--container=false`
 
 #### Using Alternative Builders
 Alternative built-in builders are `pack` and `s2i` (for supported languages).
