@@ -37,30 +37,29 @@ build your binary from the source or download it straight from the
 [release pages](https://github.com/knative/func/releases) under *Assets*.
 
 Alternatively, for your convenience, see if your OS and architecture can be
-found in the list below for an easy copy&paste and download our latest version
-`knative-v1.16.1`.
+found in the list below for an easy copy&paste and download our latest version.
 
 ### Linux
 
 #### amd64
 ```bash
-curl -L -o /usr/local/bin/func https://github.com/knative/func/releases/download/knative-v1.16.1/func_linux_amd64
+curl -L -o /usr/local/bin/func https://github.com/knative/func/releases/latest/download/func_linux_amd64
 ```
 
 #### arm64
 ```bash
-curl -L -o /usr/local/bin/func https://github.com/knative/func/releases/download/knative-v1.16.1/func_linux_arm64
+curl -L -o /usr/local/bin/func https://github.com/knative/func/releases/latest/download/func_linux_arm64
 ```
 
 ### Windows
 
 #### PowerShell
 ```powershell
-Invoke-WebReqest -Uri "https://github.com/knative/func/releases/download/knative-v1.16.1/func_windows_amd64.exe" -OutFile <"C:\path\to\your\destination\func.exe">
+Invoke-WebReqest -Uri "https://github.com/knative/func/releases/latest/download/func_windows_amd64.exe" -OutFile <"C:\path\to\your\destination\func.exe">
 ```
 alternatively if `curl` is pre-installed
 ```powershell
-curl -L -o <C:\path\to\your\destination\func.exe> "https://github.com/knative/func/releases/download/knative-v1.16.1/func_windows_amd64.exe" 
+curl -L -o <C:\path\to\your\destination\func.exe> "https://github.com/knative/func/releases/latest/download/func_windows_amd64.exe" 
 ```
 *NOTE: You need to change the part in <> to your desired destination*
 *(don't include the "<>" symbols)*
@@ -69,13 +68,13 @@ curl -L -o <C:\path\to\your\destination\func.exe> "https://github.com/knative/fu
 #### amd64
 
 ```sh
-curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/download/knative-v1.16.1/func_darwin_amd64"
+curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/latest/download/func_darwin_amd64"
 ```
 
 #### arm64
 
 ```sh
-curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/download/knative-v1.16.1/func_darwin_arm64"
+curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/latest/download/func_darwin_arm64"
 ```
 
 *NOTE: After downloading on MacOS and Linux, you might need to make the file
@@ -131,12 +130,15 @@ func create --repository=https://github.com/gauron99/func-templates --language g
 future.*
 
 In order to use the Host Builder in the mean time, you will need to enable it via a ENV variable
-and set it in `func` via CLI flag.
+and specify some flags in `func` via CLI.
 
-Alternativelly, run this in your terminal, or put in your config file (*bashrc*)
+Alternativelly, run this in your terminal, or put in your config file (*bashrc etc.*)
 ```bash
-export FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false
+export FUNC_ENABLE_HOST_BUILDER=1
 ```
+
+Then simply add `--builder=host` to build your Function with the Host builder.
+If you want to `func run` your Function locally first, make sure to `--container=false`
 
 #### Using Alternative Builders
 Alternative built-in builders are `pack` and `s2i` (for supported languages).
