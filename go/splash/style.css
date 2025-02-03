@@ -1,0 +1,35 @@
+body {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #E1CF33;
+}
+
+header {
+  text-align: center;
+  align-items: center;
+  padding: 20px;
+
+}
+
+.logo {
+  height: auto;
+  max-width: 30%;
+}
+
+.content{
+  flex: 1;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+  margin-left: 15%;
+  margin-right: 15%;
+}
+
+footer {
+  text-align: center;
+  margin-top: auto;
+}

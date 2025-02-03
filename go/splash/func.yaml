@@ -1,0 +1,11 @@
+specVersion: 0.36.0
+name: splash
+runtime: go
+registry: quay.io/dfridric
+namespace: default
+created: 2025-01-23T17:41:41.387018396+01:00
+build:
+  builder: host
+deploy:
+  namespace: default
+  image: quay.io/dfridric/splash@sha256:1df0652b82ef67ec38cb8439d95e70dab828147668847ee9c4c4f544f6d2fc16
