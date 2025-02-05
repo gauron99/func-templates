@@ -29,7 +29,7 @@ func New() *MyFunction {
 // This is handler for "http.HandleFunc("/", Handle)" equivalent
 func (f *MyFunction) Handle(res http.ResponseWriter, req *http.Request) {
 	if req.Method != "GET" {
-		// TODO delegate other requests differently
+		// TODO handle other requests differently
 		return
 	}
 	// remove any strange '..' and similar unwanted paths
