@@ -1,20 +1,27 @@
 # Go Splash screen (static webpage)
 
 Welcome to your new Go Function! The function code can be found in
-[`function.go`](function.go). This Function is a static web page which will
-be server on an available port on localhost (default is 8080 if not occupied).
+[`function.go`](function.go). This Function is a static web page which
+can be run locally with `func run` as well as deployed as usual with
+a simple `func deploy` to your existing cluster.
+
+Since the `Handle()` function is exposed, the local files located in root
+directory of this function are simply served with `http.ServeFile()`
+
+The Web page includes a `.css` and `.png` files which are both included in your
+function (the whole directory is).
+
+If desired, you can uncomment abnd implement other methods, like (Start(),Stop() etc.),
+all are included in the `function.go` commented below the `Handle()` method.
 
 ## Development
 
-Develop new features by adding a test to [`function_test.go`](function_test.go) for
-each feature, and confirm it works with `go test`.
+You can develop locally without having the need to redeploy your Function each time
+you update your code. Simply execute `func run` in your CLI and develop on
+`localhost:8080` (or whatever port is available at the time -- this will be shown
+in the CLI).
 
-Update the running analog of the function using the `func` CLI or client
-library, and it can be invoked from your browser or from the command line:
-
-```console
-curl http://myfunction.example.com/
-```
+Hope you enjoy your easy developement and let us know how it goes on [Slack]('https://cloud-native.slack.com/archives/C04LKEZUXEE')
 
 For more, see [the complete documentation]('https://github.com/knative/func/tree/main/docs')
 
