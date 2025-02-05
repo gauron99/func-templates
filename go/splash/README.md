@@ -1,11 +1,12 @@
 # Go Splash screen (static webpage)
 
-Welcome to your new Go Function! The boilerplate function code can be found in
-[`handle.go`](handle.go). This Function responds to HTTP requests.
+Welcome to your new Go Function! The function code can be found in
+[`function.go`](function.go). This Function is a static web page which will
+be server on an available port on localhost (default is 8080 if not occupied).
 
 ## Development
 
-Develop new features by adding a test to [`handle_test.go`](handle_test.go) for
+Develop new features by adding a test to [`function_test.go`](function_test.go) for
 each feature, and confirm it works with `go test`.
 
 Update the running analog of the function using the `func` CLI or client
