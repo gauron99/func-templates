@@ -11,8 +11,8 @@ directory of this function are simply served with `http.ServeFile()`
 The Web page includes a `.css` and `.png` files which are both included in your
 function (the whole directory is).
 
-If desired, you can uncomment abnd implement other methods, like (Start(),Stop() etc.),
-all are included in the `function.go` commented below the `Handle()` method.
+If desired, you can uncomment and implement other methods, like Start(),Stop() etc..
+All are included in the `function.go` commented out below the `Handle()` method.
 
 ## Development
 
