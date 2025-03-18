@@ -99,6 +99,7 @@ jobs:
           ### language & template specific prerequisites
           # blog needs to build hugo first
           if [ "$language" == "go" ] && [ "$template" == "blog" ];then
+            sudo apt install hugo
             make build
           fi
 
