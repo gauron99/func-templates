@@ -101,7 +101,9 @@ jobs:
           ############################## PRE-REQS ##############################
           echo "> PREREQS (if any)"
           ### language & template specific prerequisites
-          if [ ${{matrix.language}} == "typescript" ];then
+          if [ ${{matrix.language}} == "go" ] && [ "$template" == "blog" ];then
+            make
+          elif [ ${{matrix.language}} == "typescript" ];then
             npm install
           elif [ ${{matrix.language}} == "rust" ]; then
             cargo build
