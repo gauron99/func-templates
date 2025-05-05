@@ -30,7 +30,7 @@ the
 following:
 
 ```bash
-hugo build --destination ../dist`
+hugo build --destination ../dist
 ```
 
 Now you can simply `func run` or `func deploy` with the host builder to either
@@ -65,5 +65,8 @@ Use `make clean` once you want to get rid of all the generated files to have a
 clean Functions root directory.
 
 ## GLHF!
-Let us know what you make with Functions and share it with us on
+- Found a mistake in the templates?
+- Created a new project with Functions?
+
+Share it with us on
 [CNCF Slack](https://cloud-native.slack.com/archives/C04LKEZUXEE)!
