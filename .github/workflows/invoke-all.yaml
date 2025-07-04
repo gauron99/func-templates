@@ -14,7 +14,7 @@ jobs:
       languages: ${{ steps.prep-matrix.outputs.languages }}
       language_paths: ${{ steps.prep-matrix.outputs.language_paths }}
     env:
-      FUNC_VERSION: "knative-v1.17.0"
+      FUNC_VERSION: "knative-v1.18.0"
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
