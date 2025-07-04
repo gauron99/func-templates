@@ -40,8 +40,6 @@ jobs:
       FUNC_VERSION: "knative-v1.18.0"
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
-      # UPDATE THIS IF HOST BUILDER IS ENABLED FOR MORE LANGUAGES
-      HOST_ENABLED_LANGUAGES: '["go","python"]'
       HEADREF: ${{github.head_ref}}
       # UPDATE THIS IF HOST BUILDER IS ENABLED FOR MORE LANGUAGES
       HOST_ENABLED_LANGUAGES: '["go","python"]'
