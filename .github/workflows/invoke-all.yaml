@@ -42,7 +42,7 @@ jobs:
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
       # UPDATE THIS IF HOST BUILDER IS ENABLED FOR MORE LANGUAGES
-    HOST_ENABLED_LANGUAGES: '["go","python"]'
+      HOST_ENABLED_LANGUAGES: '["go","python"]'
       HEADREF: ${{github.head_ref}}
     steps:
     - name: Checkout code
