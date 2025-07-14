@@ -61,8 +61,11 @@ alternatively if `curl` is pre-installed
 ```powershell
 curl -L -o <C:\path\to\your\destination\func.exe> "https://github.com/knative/func/releases/latest/download/func_windows_amd64.exe"
 ```
-> [!NOTE] You need to change the part in <> to your desired destination
+
+> [!WARNING]
+> You need to change the part in <> to your desired destination
 > (don't include the "<>" symbols)
+
 ### Mac (darwin OS)
 
 #### amd64
@@ -77,7 +80,8 @@ curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/latest/
 curl -L -o /usr/local/bin/func "https://github.com/knative/func/releases/latest/download/func_darwin_arm64"
 ```
 
-> [!NOTE] After downloading on MacOS and Linux, you might need to make the file
+> [!NOTE]
+> After downloading on MacOS and Linux, you might need to make the file
 > executable
 
 ```sh
@@ -102,6 +106,7 @@ containerize your applications. (*You can get this as a standalone tool*)
 Please refer to **kind**
 [installation page](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 or download any other runner that you like.
+
 #### Download cli commands for k8s (kubectl)
 In order to interact with the objects in k8s, its recommended to get
 [kubectl](https://kubernetes.io/docs/tasks/tools/).
@@ -116,7 +121,8 @@ Create your functions directory and `cd` into it
 mkdir -p ~/testing/myfunc && cd ~/testing/myfunc
 ```
 
-Create a function in **golang** with **hello template** within the new (current and empty) directory
+Create a function in **golang** with **hello template** within the new
+(current and empty) directory
 
 ```
 func create --repository=https://github.com/gauron99/func-templates --language go --template=hello
@@ -152,18 +158,17 @@ see detailed info in [Templates structure](#templates-structure) section.
 ### Build a Function
 
 #### Using the Host Builder
-> [!NOTE]
-> Some languages already have the host builder enabled but not all.
-> If available, we recommend using the host builder.
+> [!WARNING]
+> Host builder is currently available for runtimes `go` and `python`
 
-In order to use the Host Builder, simply add `--builder=host` to build your
-Function. If you want to `func run` your Function locally first, it's also
-recommended to use `--container=false`.
+> [!TIP]
+> We recommend using the host builder `--builder=host` when available
 
-```bash
-#deploy to a running cluster (this will also build if needed)
-func deploy --builder=host
-```
+You build a function using the `func build` command. You can specify your desired
+builder (look below) or don't configure anything and use the default.
+
+If you want to `func run` your Function locally first, it's recommended to use
+`--container=false`
 
 #### Using Alternative Builders
 Alternative built-in builders are `pack` and `s2i` (for supported languages).
@@ -171,17 +176,23 @@ The way to use them is simple. Just specify which one you want using the
 `--builder` flag (eg. `--builder=pack`)
 
 ### Deploy a Function
-> [!NOTE]
+> [!WARNING]
 > In order to deploy anything to a cluster, you will need to have one set up and
-> running along with at least [Knative-Serving](https://knative.dev/docs/serving/) installed.
+> running along with at least [Knative-Serving](https://knative.dev/docs/serving/)
+> installed.
 
 You can skip the building step entirely and deploy straight after creating your
 function. (building is included in the `func deploy`).
 
-#### Local
+> [!NOTE]
+> You can skip the building step entirely and deploy straight after creating your
+> function. (building is included in the `deploy`).
+
+#### Local deployment
 You can deploy your local code (from your machine) to a cluster using a standard
 deploy command. `func` will need to know a registry to use for the image
 *to be created*. You can specify with a flag or wait to be prompted for it.
+
 ```bash
 func deploy --registry=myregistry.com/username
 ```
@@ -194,11 +205,12 @@ with your image to solely deploy it.
 func deploy --image=registry.com/username/myimage@sha256:xxx
 ```
 
-*NOTE: If you know what you want, at any point you can add a `--build` flag to
-your command which will explicitly tell `func` if you want to build (or not)
-your image. (truthy values will work).*
+> [!TIP]
+> If you know what you want, at any point you can add a `--build` flag to
+> your command which will explicitly tell `func` if you want to build (or not)
+> your image. (truthy values will work).
 
-#### Remote
+#### Remote deployment
 
 You can also utilize a remote deployment, which will use
 [tekton](https://tekton.dev/) under the hood. (Which will need to be present in
@@ -210,7 +222,8 @@ You can simply add `--remote` to your `func deploy` command.
  Directory structure is as follows: **root/[language]/[template]** where *root* is
  the github repository itself, *language* is the programming language used and
  *template* is the name of the template. Function is created from Git repo via
- `--repository` flag when using `func create` command. More in [How-To-Use](#how-to-use) section.
+ `--repository` flag when using `func create` command. More in
+ [How-To-Use](#how-to-use) section.
 
 ```
 github.com/gauron99/func-templates <--[root]
@@ -226,12 +239,14 @@ github.com/gauron99/func-templates <--[root]
 ```
 
 # Contact
-You can contact us on CNCF Slack [knative-functions](https://cloud-native.slack.com/archives/C04LKEZUXEE) channel
+You can contact us on CNCF Slack
+[knative-functions](https://cloud-native.slack.com/archives/C04LKEZUXEE) channel
 
 ## F&Q
 1. **Function signature error**
 ```
-Error: function may not implement both the static and instanced method signatures simultaneously
+Error: function may not implement both the static and instanced method signatures
+simultaneously
 ```
 ***->** this happens when `func (f *F) Somename(){}` is defined as well as
 `func Handle(){}`, these are the 2 signatures supported currently - instanced
