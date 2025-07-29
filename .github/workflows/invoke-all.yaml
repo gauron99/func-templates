@@ -11,14 +11,16 @@ on:
   push:
     branches:
       - main
+
+env:
+    FUNC_VERSION: 'knative-v1.19.0'
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
     outputs:
       languages: ${{ steps.prep-matrix.outputs.languages }}
       language_paths: ${{ steps.prep-matrix.outputs.language_paths }}
-    env:
-      FUNC_VERSION: 'knative-v1.18.0'
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -29,8 +31,8 @@ jobs:
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
         language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')"
-        languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | xargs -n 1 basename | jq -R -s 'split("\n")[:-1]')"
 
+        languages=$(find . -maxdepth 1 -type d -not -name ".*" -exec basename {} \; | jq -R -s -c 'split("\n")'[:-1])
         # set output
         echo language_paths=$language_paths >> $GITHUB_OUTPUT
         echo languages=$languages >> $GITHUB_OUTPUT
@@ -43,11 +45,10 @@ jobs:
       matrix:
         language: ${{ fromJSON(needs.prepare.outputs.languages) }}
     env:
-      FUNC_VERSION: "knative-v1.18.0"
       ACTIONS_STEP_DEBUG: true
       language_paths: ${{needs.prepare.outputs.language_paths}}
       HEADREF: ${{github.head_ref}}
-      # UPDATE THIS IF HOST BUILDER IS ENABLED FOR MORE LANGUAGES
+      # TODO: UPDATE THIS IF HOST BUILDER IS ENABLED FOR MORE LANGUAGES
       HOST_ENABLED_LANGUAGES: '["go","python"]'
     steps:
     - name: Checkout code
@@ -69,28 +70,40 @@ jobs:
         # Might change this to <one "run" per language> scenario because then
         # I would just need to check the matrix language for which one to run
 
-        # DETERMINE IF HOST BUILDER SHOULD BE USED
+        set -euo pipefail
+
+        builder="pack"
+        request_type="GET"
+        container=true
+        language=${{ matrix.language }}
+
+        ## DETERMINE IF HOST BUILDER SHOULD BE USED
         ## NOTE: HOST_ENABLED_LANGUAGES MUST BE UP TO DATE
         if echo '${{env.HOST_ENABLED_LANGUAGES}}' | jq -r ".[] | select(. == \"${{matrix.language}}\")" | grep -q .; then
-          HOST_ENABLED=true
-        else
-          HOST_ENABLED=false
+          builder="host"
         fi
 
-        language=${{matrix.language}}
-        echo "Current language is $language"
-        echo "host enabled? $HOST_ENABLED"
+        echo "Using language '$language'"
+        echo "Using builder '$builder'"
+        if [[ "$builder" == "host" ]];then
+          container=false
+        fi
+        echo "Using container '$container'"
 
         # This takes the array of paths, wraps it in single quotes for jq, then
         # selects only the value that matches with language to get current
         # language AND its full path (where the func template is)
         language_path=$(echo '${{env.language_paths}}' | jq -r ".[] | select(contains(\"${{matrix.language}}\"))")
+        echo ">> language_path=$language_path"
 
         ## use the Pull request environment so that the changes are included in testing
         url="https://github.com/gauron99/func-templates#${{ env.HEADREF }}"
+        echo ">> url=$url"
+
         WORKDIR=$(mktemp -d)
         cd $WORKDIR
         for template_dir_abs in $(ls -d $language_path*/); do
+          echo "template_dir_abs=$template_dir_abs"
           echo "ls -la ${GITHUB_WORKSPACE}"
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
@@ -101,37 +114,24 @@ jobs:
           echo "f create $language-$template -r=$url -l=$language -t=$template"
           f create $language-$template -r "$url" -l "$language" -t "$template"
 
+          echo "cd $language-$template"
           cd $language-$template
 
           ############################## PRE-REQS ##############################
           echo "> PREREQS (if any)"
           ### language & template specific prerequisites
-          if [ ${{matrix.language}} == "go" ] && [ "$template" == "blog" ];then
+          if [ ${{ matrix.language }} == "go" ] && [ "$template" == "blog" ];then
             make
-          elif [ ${{matrix.language}} == "typescript" ];then
+          elif [ ${{ matrix.language }} == "typescript" ];then
             npm install
-          elif [ ${{matrix.language}} == "rust" ]; then
+          elif [ ${{ matrix.language }} == "rust" ]; then
             cargo build
           fi
 
-          ############################# FUNC BUILD #############################
-          echo "> FUNC BUILD"
-          if [ "$HOST_ENABLED" == "true" ]; then
-            echo "build with host"
-            FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
-          else
-            echo "build with pack"
-
-           FUNC_REGISTRY=quay.io/dfridric f build
-          fi
-
-          ############################## FUNC RUN ##############################
-          echo "> FUNC RUN"
-          if [ "$HOST_ENABLED" == "true" ]; then
-            FUNC_ENABLE_HOST_BUILDER=1 FUNC_CONTAINER=false f run &
-          else
-            FUNC_CONTAINER=true f run &
-          fi
+          ########################## FUNC BUILD & RUN ##########################
+          echo "> FUNC BUILD & RUN"
+          FUNC_REGISTRY=quay.io/dfridric f build --builder=$builder
+          f run --container=$container --build=false &
 
           RUN_PID=$!
 
@@ -141,7 +141,7 @@ jobs:
             echo "Failed to start 'func run'. Exiting"
             exit 1
           fi
-
+          # wait for run just in case
           sleep 5
           ############################# FUNC INVOKE #############################
           echo "> FUNC INVOKE"
@@ -151,7 +151,7 @@ jobs:
           while [ $RETRY_COUNT -lt $MAX_RETRIES ]; do
             echo "Attempt $RETRY_COUNT of $MAX_RETRIES"
             echo "Invoking 'func invoke' with current PID $$"
-            if f invoke; then
+            if f invoke --request-type=GET; then
               echo "'func invoke' succeeded."
               SUCCESS=true
               break
