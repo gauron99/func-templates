@@ -1,7 +1,11 @@
 name: Invoke All Functions
 
-on: 
+on:
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
     paths-ignore:
       - '.github/**'
   push:
@@ -24,7 +28,7 @@ jobs:
       run: |
         ## NOTE: ls -d returns absolute path
         ## GITHUB_WORKSPACE is the root directory
-        language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')" 
+        language_paths="$(ls -d ${GITHUB_WORKSPACE}/*/ | jq -R -s 'split("\n")[:-1]')"
         languages="$(ls -d ${GITHUB_WORKSPACE}/*/ | xargs -n 1 basename | jq -R -s 'split("\n")[:-1]')"
 
         # set output
@@ -56,7 +60,7 @@ jobs:
         name: f
     - name: Setup Hugo
       uses: peaceiris/actions-hugo@v3
-      with: 
+      with:
         hugo-version: '0.142.0'
         extended: true
     - name: Build & Invoke Function
@@ -90,7 +94,7 @@ jobs:
           echo "ls -la ${GITHUB_WORKSPACE}"
           ls -la ${GITHUB_WORKSPACE}
           template=$(basename "$template_dir_abs")
-          
+
           ############################# FUNC CREATE #############################
           echo "> FUNC CREATE"
 
@@ -116,11 +120,11 @@ jobs:
             echo "build with host"
             FUNC_ENABLE_HOST_BUILDER=1 FUNC_BUILDER=host FUNC_CONTAINER=false FUNC_REGISTRY=docker.io/4141gauron3268 f build
           else
-            echo "build with pack"  
+            echo "build with pack"
 
            FUNC_REGISTRY=quay.io/dfridric f build
           fi
-          
+
           ############################## FUNC RUN ##############################
           echo "> FUNC RUN"
           if [ "$HOST_ENABLED" == "true" ]; then
