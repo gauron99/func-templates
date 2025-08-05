@@ -1,5 +1,5 @@
-[![Invoke All Functions](https://github.com/gauron99/func-templates/actions/workflows/invoke-all.yaml/badge.svg)](https://github.com/gauron99/func-templates/actions/workflows/invoke-all.yaml)
-[![License](https://img.shields.io/github/license/gauron99/func-templates)](https://github.com/gauron99/func-templates/blob/main/LICENSE)
+[![Invoke All Functions](https://github.com/functions-dev/templates/actions/workflows/invoke-all.yaml/badge.svg)](https://github.com/functions-dev/templates/actions/workflows/invoke-all.yaml)
+[![License](https://img.shields.io/github/license/functions-dev/templates)](https://github.com/functions-dev/templates/blob/main/LICENSE)
 
 # WELCOME To Knative Function Templates!
 
@@ -125,13 +125,13 @@ Create a function in **golang** with **hello template** within the new
 (current and empty) directory
 
 ```
-func create --repository=https://github.com/gauron99/func-templates --language go --template=hello
+func create --repository=https://github.com/functions-dev/templates --language go --template=hello
 ```
 
 Alternatively create the directory with it:
 
 ```
-func create myfunc --repository=https://github.com/gauron99/func-templates --language go --template=hello
+func create myfunc --repository=https://github.com/functions-dev/templates --language go --template=hello
 ```
 
 where `--language` conveniently matches the runtime and `--template` matches
@@ -226,7 +226,7 @@ You can simply add `--remote` to your `func deploy` command.
  [How-To-Use](#how-to-use) section.
 
 ```
-github.com/gauron99/func-templates <--[root]
+github.com/function-dev/templates <--[root]
 ├── go <------------------------------[language]
 │   ├── hello <-----------------------[template]
 │   │   └── <function source files>

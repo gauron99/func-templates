@@ -97,7 +97,7 @@ jobs:
         echo ">> language_path=$language_path"
 
         ## use the Pull request environment so that the changes are included in testing
-        url="https://github.com/gauron99/func-templates#${{ env.HEADREF }}"
+        url="https://github.com/functions-dev/templates#${{ env.HEADREF }}"
         echo ">> url=$url"
 
         WORKDIR=$(mktemp -d)
